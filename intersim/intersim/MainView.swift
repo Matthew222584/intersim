@@ -8,26 +8,33 @@
 import SwiftUI
 
 struct MainView: View {
-    private let store = ChattStore.shared
+    private let store = QuestionStore.shared
     @State private var isPresenting = false
     var body: some View {
-        List(store.chatts.indices, id: \.self) {
-            ChattListRow(chatt: store.chatts[$0])
+        List(store.questions.indices, id: \.self) {
+            QuestionListRow(question: store.questions[$0])
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color(($0 % 2 == 0) ? .systemGray5 : .systemGray6))
         }
         .listStyle(.plain)
         .refreshable {
-            store.getChatts()
+            store.getQuestions()
         }
-        .navigationTitle("Chatter")
+        .navigationTitle("intersim")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement:.navigationBarLeading) {
+                Button {
+                    isPresenting.toggle() // TODO: Check isPresenting dupe for other toolbar
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+            }
             ToolbarItem(placement:.navigationBarTrailing) {
                 Button {
                     isPresenting.toggle()
                 } label: {
-                    Image(systemName: "square.and.pencil")
+                    Image(systemName: "person.fill")
                 }
             }
         }

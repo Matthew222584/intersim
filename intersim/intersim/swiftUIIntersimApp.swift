@@ -1,6 +1,6 @@
 //
-//  swiftUIChatterApp.swift
-//  swiftUIChatter
+//  swiftUIIntersimApp.swift
+//  swiftUIIntersim
 //
 //  Created by Isley Sepulveda on 2/7/24.
 //
@@ -8,9 +8,9 @@
 import SwiftUI
 
 @main
-struct swiftUIChatterApp: App {
+struct swiftUIIntersimApp: App {
     init() {
-        ChattStore.shared.getChatts()
+        QuestionStore.shared.getQuestions()
     }
     var body: some Scene {
         WindowGroup {

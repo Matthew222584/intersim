@@ -7,12 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ECE58B9D2BA9FFEA00EE5FA1 /* intersim in Resources */ = {isa = PBXBuildFile; fileRef = ECE58B9C2BA9FFEA00EE5FA1 /* intersim */; };
+		ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */; };
+		ECE58BA92BAA074400EE5FA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */; };
+		ECE58BAA2BAA074400EE5FA1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA22BAA074400EE5FA1 /* Preview Assets.xcassets */; };
+		ECE58BAB2BAA074400EE5FA1 /* QuestionListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58BA32BAA074400EE5FA1 /* QuestionListRow.swift */; };
+		ECE58BAC2BAA074400EE5FA1 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58BA42BAA074400EE5FA1 /* Question.swift */; };
+		ECE58BAD2BAA074400EE5FA1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58BA52BAA074400EE5FA1 /* MainView.swift */; };
+		ECE58BAE2BAA074400EE5FA1 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58BA62BAA074400EE5FA1 /* PostView.swift */; };
+		ECE58BAF2BAA074400EE5FA1 /* QuestionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58BA72BAA074400EE5FA1 /* QuestionStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		ECD72A5C2B7411CB00CED84D /* intersim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intersim.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ECE58B9C2BA9FFEA00EE5FA1 /* intersim */ = {isa = PBXFileReference; lastKnownFileType = folder; path = intersim; sourceTree = "<group>"; };
+		ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = swiftUIIntersimApp.swift; sourceTree = "<group>"; };
+		ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ECE58BA22BAA074400EE5FA1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		ECE58BA32BAA074400EE5FA1 /* QuestionListRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionListRow.swift; sourceTree = "<group>"; };
+		ECE58BA42BAA074400EE5FA1 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		ECE58BA52BAA074400EE5FA1 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		ECE58BA62BAA074400EE5FA1 /* PostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		ECE58BA72BAA074400EE5FA1 /* QuestionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,7 +43,7 @@
 		ECD72A532B7411CB00CED84D = {
 			isa = PBXGroup;
 			children = (
-				ECE58B9C2BA9FFEA00EE5FA1 /* intersim */,
+				ECE58B9E2BAA074400EE5FA1 /* intersim */,
 				ECD72A5D2B7411CB00CED84D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,6 +54,29 @@
 				ECD72A5C2B7411CB00CED84D /* intersim.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		ECE58B9E2BAA074400EE5FA1 /* intersim */ = {
+			isa = PBXGroup;
+			children = (
+				ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */,
+				ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */,
+				ECE58BA12BAA074400EE5FA1 /* Preview Content */,
+				ECE58BA32BAA074400EE5FA1 /* QuestionListRow.swift */,
+				ECE58BA42BAA074400EE5FA1 /* Question.swift */,
+				ECE58BA52BAA074400EE5FA1 /* MainView.swift */,
+				ECE58BA62BAA074400EE5FA1 /* PostView.swift */,
+				ECE58BA72BAA074400EE5FA1 /* QuestionStore.swift */,
+			);
+			path = intersim;
+			sourceTree = "<group>";
+		};
+		ECE58BA12BAA074400EE5FA1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				ECE58BA22BAA074400EE5FA1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -100,7 +137,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ECE58B9D2BA9FFEA00EE5FA1 /* intersim in Resources */,
+				ECE58BAA2BAA074400EE5FA1 /* Preview Assets.xcassets in Resources */,
+				ECE58BA92BAA074400EE5FA1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +149,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */,
+				ECE58BAD2BAA074400EE5FA1 /* MainView.swift in Sources */,
+				ECE58BAF2BAA074400EE5FA1 /* QuestionStore.swift in Sources */,
+				ECE58BAB2BAA074400EE5FA1 /* QuestionListRow.swift in Sources */,
+				ECE58BAE2BAA074400EE5FA1 /* PostView.swift in Sources */,
+				ECE58BAC2BAA074400EE5FA1 /* Question.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +287,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"swiftUIChatter/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"intersim/Preview Content\"";
 				DEVELOPMENT_TEAM = 8YDK9GMM7X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -272,7 +316,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"swiftUIChatter/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"intersim/Preview Content\"";
 				DEVELOPMENT_TEAM = 8YDK9GMM7X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

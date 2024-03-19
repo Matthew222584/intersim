@@ -1,6 +1,6 @@
 //
 //  PostView.swift
-//  swiftUIChatter
+//  swiftUIIntersim
 //
 //  Created by Isley Sepulveda on 2/7/24.
 //
@@ -11,12 +11,24 @@ struct PostView: View {
     @Binding var isPresented: Bool
 
     private let username = "isleysep"
-    @State private var message = "Some short sample text."
+    @State private var interviewID = "0"
+    @State private var questionText = ""
+    @State private var textResponse = ""
+    @State private var audioResponse = ""
+    @State private var videoResponse = ""
+    @State private var timestamp = ""
     @ViewBuilder
     func SubmitButton() -> some View {
         Button {
-            ChattStore.shared.postChatt(Chatt(username: username, message: message)) {
-                ChattStore.shared.getChatts()
+            QuestionStore.shared.postQuestion(Question(
+                username: username,
+                interviewID: interviewID,
+                questionText: questionText,
+                textResponse: textResponse,
+                audioResponse: audioResponse,
+                videoResponse: videoResponse,
+                timestamp: timestamp)) {
+                QuestionStore.shared.getQuestions()
         }
             isPresented.toggle()
         } label: {
@@ -37,5 +49,5 @@ struct PostView: View {
                     }
                 }
         }
-    }
+    } //TODO: update to interview ui
 }
