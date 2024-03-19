@@ -12,7 +12,7 @@ struct MainView: View {
     @State private var isPresenting = false
     var body: some View {
         List(store.questions.indices, id: \.self) {
-            QuestionListRow(question: store.questions[$0])
+            questionListRow(question: store.questions[$0])
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color(($0 % 2 == 0) ? .systemGray5 : .systemGray6))
         }

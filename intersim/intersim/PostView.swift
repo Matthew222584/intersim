@@ -39,7 +39,7 @@ struct PostView: View {
         VStack {
             Text(username)
                 .padding(.top, 30.0)
-            TextEditor(text: $message)
+            TextEditor(text: $questionText)
                 .padding(EdgeInsets(top: 10, leading: 18, bottom: 0, trailing: 4))
                 .navigationTitle("Post")
                 .navigationBarTitleDisplayMode(.inline)
