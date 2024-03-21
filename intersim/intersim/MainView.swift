@@ -10,7 +10,13 @@ import SwiftUI
 struct MainView: View {
     private let store = QuestionStore.shared
     @State private var isPresenting = false
+    @State private var initialized = false
     var body: some View {
+        Button {
+            initialized.toggle()
+        } label: {
+            Text("Start an interview!")
+        }
         List(store.questions.indices, id: \.self) {
             questionListRow(question: store.questions[$0])
                 .listRowSeparator(.hidden)
@@ -41,6 +47,9 @@ struct MainView: View {
         .navigationDestination(isPresented: $isPresenting) {
             PostView(isPresented: $isPresenting)
         }  
+        .fullScreenCover(isPresented: $initialized) {
+            StartView(isPresented: $initialized)
+        }
     }
 }
 
