@@ -11,6 +11,7 @@ struct MainView: View {
     private let store = ResponseStore.shared
     @State private var isPresenting = false
     @State private var initialized = false
+    
     var body: some View {
         Button {
             initialized.toggle()
@@ -28,22 +29,7 @@ struct MainView: View {
         }
         .navigationTitle("intersim")
         .navigationBarTitleDisplayMode(.inline)
-//        .toolbar {
-//            ToolbarItem(placement:.navigationBarLeading) {
-//                Button {
-//                    isPresenting.toggle() // TODO: Check isPresenting dupe for other toolbar
-//                } label: {
-//                    Image(systemName: "gearshape")
-//                }
-//            }
-//            ToolbarItem(placement:.navigationBarTrailing) {
-//                Button {
-//                    isPresenting.toggle()
-//                } label: {
-//                    Image(systemName: "person.fill")
-//                }
-//            }
-//        } TODO: Implement settings/profile (check if we're actually doing that)
+//       TODO: Implement settings/profile (check if we're actually doing that)
         .navigationDestination(isPresented: $isPresenting) {
             PostView(isPresented: $isPresenting)
         }  
@@ -52,9 +38,3 @@ struct MainView: View {
         }
     }
 }
-
-
-/*#Preview {
-    MainView()
-}
-*/

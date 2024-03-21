@@ -18,12 +18,10 @@ struct AudioView: View {
     func SubmitButton() -> some View {
         Button {
             ResponseStore.shared.postResponse(Response(
-                username: "isleysep",
-                interviewID: "0",
+                interviewID: 0,
                 questionText: questionText,
                 textResponse: nil,
-                audioResponse: audioPlayer.audio?.base64EncodedString(),
-                videoResponse: nil)
+                audioResponse: audioPlayer.audio?.base64EncodedString())
             ) {
                 isPresented.toggle()
             }

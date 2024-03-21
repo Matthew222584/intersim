@@ -6,13 +6,10 @@
 //
 
 struct Response {
-    var username: String?
-    var interviewID: String?
+    var interviewID: Int?
     var questionText: String?
     @OptionalizedEmpty var textResponse: String?
     @OptionalizedEmpty var audioResponse: String?
-    @OptionalizedEmpty var videoResponse: String?
-    var timestamp: String?
 }
 
 @propertyWrapper

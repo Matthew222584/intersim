@@ -47,13 +47,10 @@ final class ResponseStore {
                 self.responses = [Response]()
                 for responseEntry in responsesReceived {
                     if responseEntry.count == self.nFields {
-                        self.responses.append(Response(username: responseEntry[0],
-                                                interviewID: responseEntry[1],
-                                                questionText: responseEntry[2],
-                                                textResponse: responseEntry[3],
-                                                audioResponse: responseEntry[4],
-                                                videoResponse: responseEntry[5],
-                                                timestamp: responseEntry[6]))
+                        self.responses.append(Response(
+                                                questionText: responseEntry[0],
+                                                textResponse: responseEntry[1],
+                                                audioResponse: responseEntry[2]))
                     } else {
                         print("getResponses: Received unexpected number of fields: \(responseEntry.count) instead of \(self.nFields).")
                     }
@@ -61,14 +58,13 @@ final class ResponseStore {
             }
         }.resume()
     }
+    
     func postResponse(_ response: Response, completion: @escaping () -> ()) {
-        let jsonObj = ["username": response.username,
-                       "interviewID": response.interviewID,
-                       "questionText": response.questionText,
-                       "textResponse": response.textResponse,
-                       "audioResponse": response.audioResponse,
-                       "videoResponse": response.videoResponse,
-                       "timestamp": response.timestamp]
+        let jsonObj = ["interviewID": response.interviewID!,
+                       "questionText": response.questionText!,
+                       "textResponse": response.textResponse!,
+                       "audioResponse": response.audioResponse!] as [String : Any]
+        
         guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonObj) else {
             print("postResponse: jsonData serialization error")
             return
@@ -94,7 +90,8 @@ final class ResponseStore {
                 if httpStatus.statusCode != 200 {
                     print("postResponse: HTTP STATUS: \(httpStatus.statusCode)")
                     return
-                } else {
+                }
+                else {
                     completion()
                 }
             }

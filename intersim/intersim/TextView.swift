@@ -9,23 +9,23 @@ import SwiftUI
 
 struct TextView: View {
     @Binding var isPresented: Bool
-    
     @State private var textResponse = "Type your response here."
     @State private var isPresenting = false
     @State private var questionText = "Describe a time you resolved a workplace conflict."
+    let questionStoreInstance = QuestionStore.shared
+    @State private var questionIndex = 0
+    @State private var presentFeedbackView = false
     
     @ViewBuilder
     func SubmitButton() -> some View {
         Button {
-            ResponseStore.shared.postResponse(Response(
-                username: "isleysep",
-                interviewID: "0",
-                questionText: questionText,
-                textResponse: textResponse,
-                audioResponse: nil,
-                videoResponse: nil)
-            ) {
-                isPresented.toggle()
+            if questionIndex + 1 == questionStoreInstance.getQuestionsCount() {
+                print("display feedback view")
+                presentFeedbackView = true
+            }
+            else {
+                questionIndex += 1
+                // TODO: post response
             }
         } label: {
             Text("Submit")
@@ -35,7 +35,7 @@ struct TextView: View {
     
     var body: some View {
         VStack {
-            Text(questionText)
+            Text(questionStoreInstance.getQuestion(index: self.questionIndex))
             TextEditor(text: $textResponse)
                 .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
                 .navigationTitle("Text Interview")
@@ -49,6 +49,9 @@ struct TextView: View {
                     // dismiss virtual keyboard
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
+        }
+        .sheet(isPresented: $presentFeedbackView) {
+            FeedbackView()
         }
     }
 }

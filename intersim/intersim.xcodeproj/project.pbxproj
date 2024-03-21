@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F3F97562BACE4D800AD3405 /* QuestionsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F97552BACE4D800AD3405 /* QuestionsStore.swift */; };
+		1F3F975A2BACF78400AD3405 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F97592BACF78400AD3405 /* FeedbackView.swift */; };
 		EC2D4E2E2BACDCBD00817E96 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D4E2D2BACDCBD00817E96 /* AudioPlayer.swift */; };
 		EC2D4E302BACDD1E00817E96 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D4E2F2BACDD1E00817E96 /* AudioPlayerView.swift */; };
 		EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E122BAB5601000C0E66 /* StartView.swift */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F3F97552BACE4D800AD3405 /* QuestionsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsStore.swift; sourceTree = "<group>"; };
+		1F3F97592BACF78400AD3405 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		EC2D4E2D2BACDCBD00817E96 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		EC2D4E2F2BACDD1E00817E96 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		EC6F3E122BAB5601000C0E66 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
@@ -76,7 +80,9 @@
 				ECE58BA42BAA074400EE5FA1 /* Response.swift */,
 				ECE58BA52BAA074400EE5FA1 /* MainView.swift */,
 				ECE58BA62BAA074400EE5FA1 /* PostView.swift */,
+				1F3F97592BACF78400AD3405 /* FeedbackView.swift */,
 				ECE58BA72BAA074400EE5FA1 /* ResponseStore.swift */,
+				1F3F97552BACE4D800AD3405 /* QuestionsStore.swift */,
 				EC6F3E122BAB5601000C0E66 /* StartView.swift */,
 				EC6F3E142BACB5BB000C0E66 /* TextView.swift */,
 				EC6F3E162BACB5CD000C0E66 /* AudioView.swift */,
@@ -171,9 +177,11 @@
 				EC6F3E172BACB5CD000C0E66 /* AudioView.swift in Sources */,
 				ECE58BAB2BAA074400EE5FA1 /* ResponseListRow.swift in Sources */,
 				ECE58BAE2BAA074400EE5FA1 /* PostView.swift in Sources */,
+				1F3F97562BACE4D800AD3405 /* QuestionsStore.swift in Sources */,
 				EC2D4E2E2BACDCBD00817E96 /* AudioPlayer.swift in Sources */,
 				ECE58BAC2BAA074400EE5FA1 /* Response.swift in Sources */,
 				EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */,
+				1F3F975A2BACF78400AD3405 /* FeedbackView.swift in Sources */,
 				EC2D4E302BACDD1E00817E96 /* AudioPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
