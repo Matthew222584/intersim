@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct swiftUIIntersimApp: App {
     init() {
-        QuestionStore.shared.getQuestions()
+        ResponseStore.shared.getResponses()
     }
     var body: some Scene {
         WindowGroup {

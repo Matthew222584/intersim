@@ -20,7 +20,7 @@ struct PostView: View {
     @ViewBuilder
     func SubmitButton() -> some View {
         Button {
-            QuestionStore.shared.postQuestion(Question(
+            ResponseStore.shared.postResponse(Response(
                 username: username,
                 interviewID: interviewID,
                 questionText: questionText,
@@ -28,7 +28,7 @@ struct PostView: View {
                 audioResponse: audioResponse,
                 videoResponse: videoResponse,
                 timestamp: timestamp)) {
-                QuestionStore.shared.getQuestions()
+                ResponseStore.shared.getResponses()
         }
             isPresented.toggle()
         } label: {

@@ -17,7 +17,7 @@ struct TextView: View {
     @ViewBuilder
     func SubmitButton() -> some View {
         Button {
-            QuestionStore.shared.postQuestion(Question(
+            ResponseStore.shared.postResponse(Response(
                 username: "isleysep",
                 interviewID: "0",
                 questionText: questionText,

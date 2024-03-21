@@ -5,7 +5,7 @@
 //  Created by Isley Sepulveda on 2/7/24.
 //
 
-struct Question {
+struct Response {
     var username: String?
     var interviewID: String?
     var questionText: String?

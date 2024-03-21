@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-    private let store = QuestionStore.shared
+    private let store = ResponseStore.shared
     @State private var isPresenting = false
     @State private var initialized = false
     var body: some View {
@@ -17,14 +17,14 @@ struct MainView: View {
         } label: {
             Text("Start an interview!")
         }
-        List(store.questions.indices, id: \.self) {
-            questionListRow(question: store.questions[$0])
+        List(store.responses.indices, id: \.self) {
+            responseListRow(response: store.responses[$0])
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color(($0 % 2 == 0) ? .systemGray5 : .systemGray6))
         }
         .listStyle(.plain)
         .refreshable {
-            store.getQuestions()
+            store.getResponses()
         }
         .navigationTitle("intersim")
         .navigationBarTitleDisplayMode(.inline)
