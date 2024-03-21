@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E122BAB5601000C0E66 /* StartView.swift */; };
+		EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E142BACB5BB000C0E66 /* TextView.swift */; };
+		EC6F3E172BACB5CD000C0E66 /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E162BACB5CD000C0E66 /* AudioView.swift */; };
 		ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */; };
 		ECE58BA92BAA074400EE5FA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */; };
 		ECE58BAA2BAA074400EE5FA1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA22BAA074400EE5FA1 /* Preview Assets.xcassets */; };
@@ -20,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		EC6F3E122BAB5601000C0E66 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		EC6F3E142BACB5BB000C0E66 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		EC6F3E162BACB5CD000C0E66 /* AudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioView.swift; sourceTree = "<group>"; };
 		ECD72A5C2B7411CB00CED84D /* intersim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intersim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = swiftUIIntersimApp.swift; sourceTree = "<group>"; };
 		ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -70,6 +74,8 @@
 				ECE58BA62BAA074400EE5FA1 /* PostView.swift */,
 				ECE58BA72BAA074400EE5FA1 /* QuestionStore.swift */,
 				EC6F3E122BAB5601000C0E66 /* StartView.swift */,
+				EC6F3E142BACB5BB000C0E66 /* TextView.swift */,
+				EC6F3E162BACB5CD000C0E66 /* AudioView.swift */,
 			);
 			path = intersim;
 			sourceTree = "<group>";
@@ -153,8 +159,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */,
+				EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */,
 				ECE58BAD2BAA074400EE5FA1 /* MainView.swift in Sources */,
 				ECE58BAF2BAA074400EE5FA1 /* QuestionStore.swift in Sources */,
+				EC6F3E172BACB5CD000C0E66 /* AudioView.swift in Sources */,
 				ECE58BAB2BAA074400EE5FA1 /* QuestionListRow.swift in Sources */,
 				ECE58BAE2BAA074400EE5FA1 /* PostView.swift in Sources */,
 				ECE58BAC2BAA074400EE5FA1 /* Question.swift in Sources */,

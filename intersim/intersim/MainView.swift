@@ -28,26 +28,26 @@ struct MainView: View {
         }
         .navigationTitle("intersim")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement:.navigationBarLeading) {
-                Button {
-                    isPresenting.toggle() // TODO: Check isPresenting dupe for other toolbar
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-            }
-            ToolbarItem(placement:.navigationBarTrailing) {
-                Button {
-                    isPresenting.toggle()
-                } label: {
-                    Image(systemName: "person.fill")
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItem(placement:.navigationBarLeading) {
+//                Button {
+//                    isPresenting.toggle() // TODO: Check isPresenting dupe for other toolbar
+//                } label: {
+//                    Image(systemName: "gearshape")
+//                }
+//            }
+//            ToolbarItem(placement:.navigationBarTrailing) {
+//                Button {
+//                    isPresenting.toggle()
+//                } label: {
+//                    Image(systemName: "person.fill")
+//                }
+//            }
+//        } TODO: Implement settings/profile (check if we're actually doing that)
         .navigationDestination(isPresented: $isPresenting) {
             PostView(isPresented: $isPresenting)
         }  
-        .fullScreenCover(isPresented: $initialized) {
+        .navigationDestination(isPresented: $initialized) {
             StartView(isPresented: $initialized)
         }
     }

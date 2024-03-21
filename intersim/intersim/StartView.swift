@@ -10,7 +10,7 @@ import SwiftUI
 struct StartView: View {
     @Binding var isPresented: Bool
     @State private var isPresenting = false
-    @State private var text = true
+    @State private var text = nil
     
     @ViewBuilder
     func TextButton() -> some View {
@@ -26,7 +26,7 @@ struct StartView: View {
     @ViewBuilder
     func AudioButton() -> some View {
         Button {
-            text = true
+            text = false
             isPresented.toggle()
         } label: {
             Text("Audio")
@@ -38,10 +38,17 @@ struct StartView: View {
         VStack {
             Text("Choose an interview type.")
                 .padding(.top, 30.0)
-            Spacer()
             HStack {
                 TextButton()
                 AudioButton()
+            }
+            .navigationTitle("Start")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(isPresented: $text) {
+                TextView(isPresented: $text)
+            }
+            .navigationDestination(isPresented: $text) {
+                AudioView(isPresented: $text)
             }
         }
     }
