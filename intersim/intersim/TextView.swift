@@ -45,6 +45,10 @@ struct TextView: View {
                         SubmitButton()
                     }
                 }
+                .onTapGesture {
+                    // dismiss virtual keyboard
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
         }
     }
 }

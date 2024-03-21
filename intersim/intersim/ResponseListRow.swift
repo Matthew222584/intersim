@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct responseListRow: View {
+    @Environment(AudioPlayer.self) private var audioPlayer
+    @State private var isPresenting = false
     let response: Response
     
     var body: some View {

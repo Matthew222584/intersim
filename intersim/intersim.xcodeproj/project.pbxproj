@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC2D4E2E2BACDCBD00817E96 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D4E2D2BACDCBD00817E96 /* AudioPlayer.swift */; };
+		EC2D4E302BACDD1E00817E96 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D4E2F2BACDD1E00817E96 /* AudioPlayerView.swift */; };
 		EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E122BAB5601000C0E66 /* StartView.swift */; };
 		EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E142BACB5BB000C0E66 /* TextView.swift */; };
 		EC6F3E172BACB5CD000C0E66 /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E162BACB5CD000C0E66 /* AudioView.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EC2D4E2D2BACDCBD00817E96 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		EC2D4E2F2BACDD1E00817E96 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		EC6F3E122BAB5601000C0E66 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		EC6F3E142BACB5BB000C0E66 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		EC6F3E162BACB5CD000C0E66 /* AudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioView.swift; sourceTree = "<group>"; };
@@ -76,6 +80,8 @@
 				EC6F3E122BAB5601000C0E66 /* StartView.swift */,
 				EC6F3E142BACB5BB000C0E66 /* TextView.swift */,
 				EC6F3E162BACB5CD000C0E66 /* AudioView.swift */,
+				EC2D4E2D2BACDCBD00817E96 /* AudioPlayer.swift */,
+				EC2D4E2F2BACDD1E00817E96 /* AudioPlayerView.swift */,
 			);
 			path = intersim;
 			sourceTree = "<group>";
@@ -165,8 +171,10 @@
 				EC6F3E172BACB5CD000C0E66 /* AudioView.swift in Sources */,
 				ECE58BAB2BAA074400EE5FA1 /* ResponseListRow.swift in Sources */,
 				ECE58BAE2BAA074400EE5FA1 /* PostView.swift in Sources */,
+				EC2D4E2E2BACDCBD00817E96 /* AudioPlayer.swift in Sources */,
 				ECE58BAC2BAA074400EE5FA1 /* Response.swift in Sources */,
 				EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */,
+				EC2D4E302BACDD1E00817E96 /* AudioPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +311,7 @@
 				DEVELOPMENT_TEAM = 8YDK9GMM7X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "to record audio interview.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,6 +341,7 @@
 				DEVELOPMENT_TEAM = 8YDK9GMM7X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "to record audio interview.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

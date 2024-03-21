@@ -46,9 +46,9 @@ struct StartView: View {
             .navigationDestination(isPresented: $textShown) {
                 TextView(isPresented: $textShown)
             }
-//            .navigationDestination(isPresented: $audioShown) {
-//                AudioView(isPresented: $audioShown)
-//            }
+            .navigationDestination(isPresented: $audioShown) {
+                AudioView(isPresented: $audioShown)
+            }
         }
     }
 }

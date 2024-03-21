@@ -17,6 +17,7 @@ struct swiftUIIntersimApp: App {
             NavigationStack {
                 MainView()
             }
+            .environment(AudioPlayer())
         }
     }
 }
