@@ -10,13 +10,14 @@ import SwiftUI
 struct StartView: View {
     @Binding var isPresented: Bool
     @State private var isPresenting = false
-    @State private var textShown = false
-    @State private var audioShown = false
+    @State private var showQuestion = false
+    @State private var showText = false
     
     @ViewBuilder
     func TextButton() -> some View {
         Button {
-            textShown.toggle()
+            showQuestion = true
+            showText = true
         } label: {
             Text("Text")
             Image(systemName: "doc.text")
@@ -26,7 +27,7 @@ struct StartView: View {
     @ViewBuilder
     func AudioButton() -> some View {
         Button {
-            audioShown.toggle()
+            showQuestion = true
         } label: {
             Text("Audio")
             Image(systemName: "mic")
@@ -43,11 +44,8 @@ struct StartView: View {
             }
             .navigationTitle("Start")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(isPresented: $textShown) {
-                TextView(isPresented: $textShown)
-            }
-            .navigationDestination(isPresented: $audioShown) {
-                AudioView(isPresented: $audioShown)
+            .navigationDestination(isPresented: $showQuestion) {
+                QuestionView(showTextView: showText)
             }
         }
     }
