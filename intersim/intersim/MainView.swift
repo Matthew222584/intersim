@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainView: View {
-    private let store = ResponseStore.shared
     @State private var initialized = false
     
     var body: some View {

@@ -9,9 +9,6 @@ import SwiftUI
 
 @main
 struct swiftUIIntersimApp: App {
-    init() {
-        ResponseStore.shared.getResponses()
-    }
     var body: some Scene {
         WindowGroup {
             NavigationStack {

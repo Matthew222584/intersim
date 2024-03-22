@@ -24,21 +24,13 @@ struct AudioView: View {
                     startRecording()
                 }
                 isRecording.toggle()
-            }) {
-                Text(isRecording ? "Stop Recording" : "Start Recording")
-            }
+            }) { Text(isRecording ? "Stop Recording" : "Start Recording") }
         }
-        .padding()
-        .onAppear(perform: requestPermission)
-    }
-
-    func requestPermission() {
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            if granted {
-                print("Permission granted")
-            } else {
-                print("Permission denied")
-            }
+        .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
+        .navigationTitle("Audio Interview")
+        .navigationBarTitleDisplayMode(.inline)
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 
@@ -62,10 +54,10 @@ struct AudioView: View {
     }
 
     func startPlayback() {
-        print("audio is playing")
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: audioURL!)
             audioPlayer?.play()
+            print("audio is playing")
         } catch {
             print("Error playing audio: \(error.localizedDescription)")
         }

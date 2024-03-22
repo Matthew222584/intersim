@@ -8,20 +8,27 @@
 import SwiftUI
 
 struct QuestionView: View {
-    let questionStoreInstance = QuestionStore.shared
+    let interviewInstance = Interview.shared
+    var showTextView: Bool
     @State private var questionIndex = 0
     @State private var presentFeedbackView = false
-    var showTextView: Bool
+    @State private var responseText = "Type your response here."
     
     @ViewBuilder
     func SubmitButton() -> some View {
         Button {
-            if questionIndex + 1 == questionStoreInstance.getQuestionsCount() {
+            var response = Response()
+            response.interviewID = interviewInstance.getInterviewId()
+            response.questionID = interviewInstance.getQuestionId(index: self.questionIndex)
+            response.textResponse = responseText
+            interviewInstance.postResponse(response: response)
+            
+            if questionIndex + 1 == interviewInstance.getQuestionsCount() {
                 presentFeedbackView = true
             }
             else {
                 questionIndex += 1
-                // TODO: post response
+                responseText = "Type your response here."
             }
         } label: {
             Text("Submit")
@@ -31,9 +38,9 @@ struct QuestionView: View {
     
     var body: some View {
         VStack {
-            Text(questionStoreInstance.getQuestion(index: self.questionIndex))
+            Text(interviewInstance.getQuestion(index: self.questionIndex))
             if showTextView {
-                TextView()
+                TextView(textResponse: $responseText)
             }
             else {
                 AudioView()
@@ -44,9 +51,8 @@ struct QuestionView: View {
                 SubmitButton()
             }
         }
-        .sheet(isPresented: $presentFeedbackView) {
+        .fullScreenCover(isPresented: $presentFeedbackView) {
             FeedbackView()
         }
     }
 }
-
