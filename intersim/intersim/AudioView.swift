@@ -2,74 +2,72 @@
 //  AudioView.swift
 //  intersim
 //
-//  Created by Isley Sepulveda on 3/21/24.
+//  Created by Kyle on 3/21/24.
 //
 
 import SwiftUI
+import AVFoundation
 
 struct AudioView: View {
-    @Binding var isPresented: Bool
-    @Environment(AudioPlayer.self) private var audioPlayer
-    
-    @State private var isPresenting = false
-    @State private var questionText = "Describe a time you resolved a workplace conflict."
-    
-    @ViewBuilder
-    func SubmitButton() -> some View {
-        Button {
-            ResponseStore.shared.postResponse(Response(
-                username: "isleysep",
-                interviewID: "0",
-                questionText: questionText,
-                textResponse: nil,
-                audioResponse: audioPlayer.audio?.base64EncodedString(),
-                videoResponse: nil)
-            ) {
-                isPresented.toggle()
-            }
-        } label: {
-            Text("Submit")
-            Image(systemName: "paperplane")
-        }
-    }
-    
+    @State private var isRecording = false
+    @State private var audioRecorder: AVAudioRecorder!
+    @State private var audioPlayer: AVAudioPlayer?
+    @State private var audioURL: URL?
+
     var body: some View {
         VStack {
-            Text(questionText)
-                .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
-                .navigationTitle("Audio Interview")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement:.navigationBarTrailing) {
-                        SubmitButton()
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        AudioButton(isPresenting: $isPresenting)
-                    }
+            Button(action: {
+                if isRecording {
+                    audioRecorder.stop()
+                    startPlayback()
+                } else {
+                    startRecording()
                 }
-                .fullScreenCover(isPresented: $isPresenting) {
-                    AudioPlayerView(isPresented: $isPresenting, autoPlay: false)
-                }
-                .onAppear {
-                    audioPlayer.setupRecorder()
-                }
+                isRecording.toggle()
+            }) {
+                Text(isRecording ? "Stop Recording" : "Start Recording")
+            }
+        }
+        .padding()
+        .onAppear(perform: requestPermission)
+    }
+
+    func requestPermission() {
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            if granted {
+                print("Permission granted")
+            } else {
+                print("Permission denied")
+            }
         }
     }
-}
 
-struct AudioButton: View {
-    @Binding var isPresenting: Bool
-    @Environment(AudioPlayer.self) private var audioPlayer
+    func startRecording() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playAndRecord, mode: .default)
+            try audioSession.setActive(true)
+            let audioFilename = FileManager.default.temporaryDirectory.appendingPathComponent("recording.wav")
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: [
+                AVFormatIDKey: kAudioFormatLinearPCM,
+                AVSampleRateKey: 44100,
+                AVNumberOfChannelsKey: 1,
+                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            ])
+            audioRecorder.record()
+            audioURL = audioFilename
+        } catch {
+            print("Error recording audio: \(error.localizedDescription)")
+        }
+    }
 
-    var body: some View {
-        Button {
-            isPresenting.toggle()
-        } label: {
-            if let _ = audioPlayer.audio {
-                Image(systemName: "mic.fill").padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)).scaleEffect(1.5).foregroundColor(Color(.systemRed))
-            } else {
-                Image(systemName: "mic").padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)).scaleEffect(1.5).foregroundColor(Color(.systemGreen))
-            }
+    func startPlayback() {
+        print("audio is playing")
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioURL!)
+            audioPlayer?.play()
+        } catch {
+            print("Error playing audio: \(error.localizedDescription)")
         }
     }
 }

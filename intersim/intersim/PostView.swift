@@ -9,27 +9,22 @@ import SwiftUI
 
 struct PostView: View {
     @Binding var isPresented: Bool
-
-    private let username = "isleysep"
     @State private var interviewID = "0"
     @State private var questionText = ""
     @State private var textResponse = ""
     @State private var audioResponse = ""
-    @State private var videoResponse = ""
-    @State private var timestamp = ""
+    
     @ViewBuilder
     func SubmitButton() -> some View {
         Button {
-            ResponseStore.shared.postResponse(Response(
-                username: username,
-                interviewID: interviewID,
-                questionText: questionText,
-                textResponse: textResponse,
-                audioResponse: audioResponse,
-                videoResponse: videoResponse,
-                timestamp: timestamp)) {
-                ResponseStore.shared.getResponses()
-        }
+            ResponseStore.shared.postResponse(
+                Response(
+                    questionText: questionText,
+                    textResponse: textResponse,
+                    audioResponse: audioResponse)
+                ) {
+                    ResponseStore.shared.getResponses()
+                }
             isPresented.toggle()
         } label: {
             Image(systemName: "paperplane")
@@ -37,8 +32,6 @@ struct PostView: View {
     }
     var body: some View {
         VStack {
-            Text(username)
-                .padding(.top, 30.0)
             TextEditor(text: $questionText)
                 .padding(EdgeInsets(top: 10, leading: 18, bottom: 0, trailing: 4))
                 .navigationTitle("Post")
