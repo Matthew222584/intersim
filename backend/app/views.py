@@ -98,7 +98,7 @@ def postanswers(request):
         cursor.execute(query, [username, interview_id, question_id, question_answer, timestamp, audio, video_file_path])
 
 
-    return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'success'}, status=201)
 
 @csrf_exempt
 def getusersummary(request):
@@ -114,7 +114,8 @@ def getusersummary(request):
     # Check if user exists in the database
     if not user_exists(username):
         return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
-
+    
+    # List all questions and answers sorted by time 
     query = """
     SELECT q.question, qr.question_answer
     FROM question_responses qr
@@ -123,7 +124,6 @@ def getusersummary(request):
     ORDER BY qr.timestamp DESC;
     """
 
-    # Execute the SQL query using Django's database connection
     with connection.cursor() as cursor:
         cursor.execute(query, [username])
         rows = cursor.fetchall()
