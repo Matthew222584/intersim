@@ -27,6 +27,7 @@ struct StartView: View {
     @ViewBuilder
     func AudioButton() -> some View {
         Button {
+            showText = false
             showQuestion = true
         } label: {
             Text("Audio")
