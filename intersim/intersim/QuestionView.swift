@@ -12,7 +12,8 @@ struct QuestionView: View {
     var showTextView: Bool
     @State private var questionIndex = 0
     @State private var presentFeedbackView = false
-    @State private var responseText = "Type your response here."
+    @State private var textResponse = "Type your response here."
+    @State private var audioURL: URL? = nil
     
     @ViewBuilder
     func SubmitButton() -> some View {
@@ -20,7 +21,18 @@ struct QuestionView: View {
             var response = Response()
             response.interviewID = interviewInstance.getInterviewId()
             response.questionID = interviewInstance.getQuestionId(index: self.questionIndex)
-            response.textResponse = responseText
+            
+            if showTextView {
+                response.textResponse = textResponse
+            } else {
+                do {
+                    response.audioResponse = try Data(contentsOf: audioURL!)
+                } catch {
+                    print("error getting audio data")
+                }
+                
+            }
+            
             interviewInstance.postResponse(response: response)
             
             if questionIndex + 1 == interviewInstance.getQuestionsCount() {
@@ -28,7 +40,7 @@ struct QuestionView: View {
             }
             else {
                 questionIndex += 1
-                responseText = "Type your response here."
+                textResponse = "Type your response here."
             }
         } label: {
             Text("Submit")
@@ -40,10 +52,13 @@ struct QuestionView: View {
         VStack {
             Text(interviewInstance.getQuestion(index: self.questionIndex))
             if showTextView {
-                TextView(textResponse: $responseText)
+                TextView(textResponse: $textResponse)
             }
             else {
-                AudioView()
+                AudioView(didFinishRecording: { url in
+                    self.audioURL = url
+                    print("got audio!")
+                })
             }
         }
         .toolbar {

@@ -30,10 +30,10 @@ class Interview {
         
         let body: [String: Any] = [
             "username": response.username,
-            "interview_id": response.interviewID!,
-            "question_id": response.questionID!,
-            "question_answer": response.textResponse!,
-            "audio": "null",
+            "interview_id": response.interviewID ?? "null",
+            "question_id": response.questionID ?? "null",
+            "question_answer": response.textResponse ?? "null",
+            "audio": response.audioResponse?.base64EncodedString() ?? "null",
             "video_file_path": "null"
         ]
         
@@ -43,8 +43,6 @@ class Interview {
         }
         
         request.httpBody = jsonData
-        
-        print(request)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {

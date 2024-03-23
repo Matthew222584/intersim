@@ -13,12 +13,16 @@ struct AudioView: View {
     @State private var audioRecorder: AVAudioRecorder!
     @State private var audioPlayer: AVAudioPlayer?
     @State private var audioURL: URL?
+    var didFinishRecording: ((URL) -> Void)?
 
     var body: some View {
         VStack {
             Button(action: {
                 if isRecording {
                     audioRecorder.stop()
+                    if let url = audioURL {
+                        didFinishRecording?(url)
+                    }
                     startPlayback()
                 } else {
                     startRecording()
@@ -53,6 +57,7 @@ struct AudioView: View {
         }
     }
 
+    // this function is for testing
     func startPlayback() {
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: audioURL!)
