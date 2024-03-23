@@ -3,6 +3,10 @@ from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 \
     import Features, EmotionOptions
+from django.http import JsonResponse, HttpResponse
+from django.db import connection
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def sentimentAPI(input_text):
 
@@ -28,11 +32,13 @@ def sentimentAPI(input_text):
 
 @csrf_exempt
 def sentiment(request):
-    if request.method != 'GET':
+    if request.method != 'POST':
         return HttpResponse(status=404)
-
+    
+    print(request.body)
     json_data = json.loads(request.body)
     text = json_data['text']
+    print(text)
     return_dict = sentimentAPI(text)
 
-    return JsonResponse({return_dict})
+    return JsonResponse({'emotions': return_dict})
