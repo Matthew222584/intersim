@@ -19,5 +19,5 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sentiment/', views.sentiment, name='sentimentAnalysis'),
+    path('sentiment/', views.sentiment, name='sentiment'),
 ]
