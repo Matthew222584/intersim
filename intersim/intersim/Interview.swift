@@ -7,12 +7,17 @@
 
 import Foundation
 
+
 class Interview {
     static let shared = Interview()
     private var questions: [String] = []
     private var questionIds: [String] = []
     private var numQuestions = 0
     private var interviewId = 0
+    //For each response there is a API call that returns a dictionary
+    //these arrays are arrays of dictionaries for each response
+    private(set) var sentiment: [[String: String]] = []
+    private(set) var speech: [[String: String]] = []
     private let serverUrl = "https://3.144.9.248/"
     
     private init() {
@@ -116,4 +121,76 @@ class Interview {
     func getQuestionId(index: Int) -> Int {
         return Int(questionIds[index])!
     }
-}
+    
+    func getSentiment() {
+
+        guard let apiSentiment = URL(string: "\(serverUrl)sentiment/") else {
+            print("sentiments: Bad URL")
+            return
+        }
+        
+        var request = URLRequest(url: apiSentiment)
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept") // expect response in JSON
+        request.httpMethod = "POST"
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("sentiments: NETWORKING ERROR")
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("sentiments: HTTP STATUS: \(httpStatus.statusCode)")
+                return
+            }
+            
+            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String:Any] else {
+                print("sentiments: failed JSON deserialization")
+                return
+            }
+            //if line below doesn't work try: let chattsReceived = jsonObj["chatts"] as? //[[String?]] ?? [] and change sentiment at top to
+            //private(set) var sentiment = [String]()
+            let newSentiment = jsonObj["emotions"] as? [String: String] ?? [:]
+            self.sentiment.append(newSentiment)
+        }
+        
+    }
+    func getSpeechToText() {
+        
+        guard let apiSpeech = URL(string: "\(serverUrl)speechToText/") else {
+            print("speechToText: Bad URL")
+            return
+        }
+        
+        var request = URLRequest(url: apiSpeech)
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept") // expect response in JSON
+        request.httpMethod = "POST"
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("speechToText: NETWORKING ERROR")
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("speechToText: HTTP STATUS: \(httpStatus.statusCode)")
+                return
+            }
+            
+            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String:Any] else {
+                print("speechToText: failed JSON deserialization")
+                return
+            }
+            let newSpeech = jsonObj["emotions"] as? [String: String] ?? [:]
+            self.speech.append(newSpeech)
+        }
+
+        }
+    func postFeedback() -> String {
+
+        let feedback = ""
+        //TODO Iterate over each API dictionary (sentiment, speech) to create a string for each response
+        //Then append each string to the overall response
+        return feedback
+       }
+    }
+
+
