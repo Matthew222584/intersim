@@ -8,6 +8,11 @@ from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+from os.path import join, dirname
+from ibm_watson import SpeechToTextV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from django.core.files.storage import FileSystemStorage
+
 def sentimentAPI(input_text):
 
     authenticator = IAMAuthenticator('5UoLws0msT8fi8c45kO08Qc_TNJTJoXE9G_MazEx5mZm')
@@ -42,3 +47,32 @@ def sentiment(request):
     return_dict = sentimentAPI(text)
 
     return JsonResponse({'emotions': return_dict})
+
+def speechToTextAPI(filepath):
+
+    authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
+    speech_to_text = SpeechToTextV1(
+        authenticator=authenticator
+    )
+
+    speech_to_text.set_service_url('https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/8ec4f5a4-43d4-4866-a13a-1b11d1a7feb0')
+
+    with open(filepath, 'rb') as audio_file:
+        speech_recognition_results = speech_to_text.recognize(audio=audio_file).get_result()
+    transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
+    return {'transcript': transcript}
+
+
+@csrf_exempt
+def speechToText(request):
+
+    if request.method != 'POST':
+        return HttpResponse(status=404)
+
+    uploaded_file = request.FILES.get('file')
+    fs = FileSystemStorage()
+    filename = fs.save(uploaded_file.name, uploaded_file)
+    path = fs.path(filename)
+    return_dict = speechToTextAPI(path)
+
+    return JsonResponse(return_dict)
