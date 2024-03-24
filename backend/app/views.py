@@ -5,6 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 from datetime import datetime
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from ibm_watson.natural_language_understanding_v1 \
+    import Features, CategoriesOptions
 
 def user_exists(username):
     """
@@ -21,6 +25,8 @@ def user_exists(username):
         cursor.execute(query, [username])
         row = cursor.fetchone()
         return row[0]
+
+
 @csrf_exempt
 def getquestions(request):
     if request.method != 'GET':
@@ -129,3 +135,35 @@ def getusersummary(request):
         rows = cursor.fetchall()
 
     return JsonResponse({'status': 'success', 'data': rows})
+
+@csrf_exempt
+def getsentiment(request):
+    if request.method != 'GET':
+        return HttpResponse(status=404)
+
+    username = request.GET.get('username')
+
+        # Make sure username is passed in
+    if not username:
+        return JsonResponse({'message': 'Username is required', 'status': 'fail'}, status=400)
+
+    # Check if user exists in the database
+    if not user_exists(username):
+        return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
+
+
+    # Does it return dict or json?    
+    response = requests.post('http://3.144.9.248:8000/sentiment/', json={'text': text})
+
+    query = """
+        INSERT INTO question_answers ()
+        VALUES (%s, %s, %s, %s, %s, %s, %s);
+    """
+
+    with connection.cursor() as cursor:
+        cursor.execute(query, [response[],response[],response[])
+
+    return JsonResponse({'status': 'success', 'data': rows})
+
+
+
