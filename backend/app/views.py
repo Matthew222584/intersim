@@ -65,7 +65,7 @@ def speechToText(base64_audio_string):
     ).get_result()
 
     transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
-    return "hello"
+    return transcript
 
 def sentimentAPI(input_text):
     authenticator = IAMAuthenticator('5UoLws0msT8fi8c45kO08Qc_TNJTJoXE9G_MazEx5mZm')
@@ -153,9 +153,9 @@ def postanswers(request):
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
     # TO DO add in audio to text conversion
-    if (audio) {
+    if (audio):
         question_answer = speechToText(audio)
-    }
+
     sentimentAnalysis = (sentimentAPI(question_answer))
     for emotion, value in sentimentAnalysis:
         add_to_sentiment_table(username, interview_id, question_id, emotion, value)
