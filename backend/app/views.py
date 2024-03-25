@@ -16,7 +16,7 @@ from ibm_watson.natural_language_understanding_v1 \
 # from modelscope.pipelines import pipeline
 # from modelscope.utils.constant import Tasks
 # import numpy as np
-# import base64
+import base64
 
 def user_exists(username):
     """
