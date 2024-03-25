@@ -15,7 +15,7 @@ class Interview {
     private var numQuestions = 0
     private var interviewId = 0
     private let serverUrl = "https://3.144.9.248/"
-    var feedback: [String]? = nil
+    var feedback: [String] = []
     
     private init() {
         fetchQuestions()
@@ -151,23 +151,20 @@ class Interview {
                 return
             }
             
+            var feedback: [String] = []
             var i = 0
             for item in jsonObj {
                 if i % 5 == 0 {
-                    print(item[0])
-                    print(item[3])
-                    self.feedback?.append(item[0] as! String)
-                    self.feedback?.append(item[3] as! String)
+                    feedback.append("Question ID: " + String((item[0] as! NSNumber).intValue))
+                    feedback.append("Response: " + (item[3] as! String))
                 }
                 i += 1
                 
-                self.feedback?.append(item[1] as! String)
-                self.feedback?.append(item[2] as! String)
+                feedback.append((item[1] as! String) + ": " + String((item[2] as! Double)))
             }
             
-            print("DEBUG")
-            print(self.feedback!)
-            print("DEBUG")
+            self.feedback = feedback
+            print(feedback)
         }.resume()
     }
 }
