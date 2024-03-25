@@ -89,8 +89,6 @@ def emotionRecognition(request):
     base64_audio_text = json_data['audio']
     audio_bytes = base64.b64decode(base64_audio_text)
 
-    print("got here1")
-
     rec_result = inference_pipeline(
         audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
     max_emotion_score = np.argmax(rec_result[0]["scores"])

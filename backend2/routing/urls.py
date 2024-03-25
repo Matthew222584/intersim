@@ -20,7 +20,7 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sentiment/', views.sentiment, name='sentiment'),
-    path('speechToText/', views.speechToText, name='speechToText'),
+    # path('sentiment/', views.sentiment, name='sentiment'),
+    # path('speechToText/', views.speechToText, name='speechToText'),
     path('speechEmotionAnalysis/', views.emotionRecognition, name='emotionRecognition')
 ]
