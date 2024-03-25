@@ -69,7 +69,7 @@ def speechToText(base64_audio_string):
         word_confidence=True
         ).get_result()
 
-    return {"audio": audio_data, "speech_recognition_results": speech_recognition_results}
+    return {"audio": str(audio_data), "speech_recognition_results": speech_recognition_results}
 
 
 def sentimentAPI(input_text):
