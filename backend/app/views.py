@@ -51,6 +51,7 @@ def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_l
         cursor.execute(query, [interview_id, question_id, emotion, confidence_lvl])
 
 def speechToText(base64_audio_string):
+    # really smart function
     authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
     speech_to_text = SpeechToTextV1(
         authenticator=authenticator
@@ -92,6 +93,9 @@ def getquestions(request):
 
     username = request.GET.get('username')
     num_questions = request.GET.get('num_questions')
+
+    if username:
+        return JsonResponse({'bob': "hi", 'status': 'success' })
 
     # make sure username and questions are passed in
     if not username or not num_questions:
