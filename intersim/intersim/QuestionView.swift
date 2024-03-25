@@ -30,7 +30,6 @@ struct QuestionView: View {
                 } catch {
                     print("error getting audio data")
                 }
-                
             }
             
             interviewInstance.postResponse(response: response)
