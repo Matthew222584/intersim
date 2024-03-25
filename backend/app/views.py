@@ -63,8 +63,8 @@ def speechToText(base64_audio_string):
         model='en-US_BroadbandModel'
     ).get_result()
 
-    transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
-    return transcript
+    # transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
+    return str(speech_recognition_results)
 
 def sentimentAPI(input_text):
     authenticator = IAMAuthenticator('5UoLws0msT8fi8c45kO08Qc_TNJTJoXE9G_MazEx5mZm')
