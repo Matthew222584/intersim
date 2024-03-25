@@ -62,13 +62,15 @@ def speechToText(base64_audio_string):
 
     audio_data = base64.b64decode(base64_audio_string)
 
-    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as temp_audio_file:
-        temp_audio_file.write(audio_data)
-        temp_file_path = temp_audio_file.name
-        with open(temp_file_path, 'rb') as process_file:
-            speech_recognition_results = speech_to_text.recognize(audio=process_file, content_type='audio/wav').get_result()
-            # transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
-            return {"audio": base64_audio_string, "file": temp_file_path, "speech_recognition_results": speech_recognition_results}
+    speech_recognition_results = speech_to_text.recognize(
+        audio=audio_data,
+        content_type='audio/wav',
+        model='en-US_BroadbandModel',
+        timestamps=True,
+        word_confidence=True
+        ).get_result()
+
+    return {"audio": audio_data, "speech_recognition_results": speech_recognition_results}
 
 
 def sentimentAPI(input_text):
