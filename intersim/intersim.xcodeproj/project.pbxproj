@@ -11,7 +11,6 @@
 		1F3F975A2BACF78400AD3405 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F97592BACF78400AD3405 /* FeedbackView.swift */; };
 		1F3F975C2BACFD6300AD3405 /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F975B2BACFD6300AD3405 /* AudioView.swift */; };
 		1F3F975E2BAD012900AD3405 /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F975D2BAD012900AD3405 /* QuestionView.swift */; };
-		1FC3DBF92BB1CE670032C3C0 /* FeedbackListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC3DBF82BB1CE670032C3C0 /* FeedbackListRow.swift */; };
 		EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E122BAB5601000C0E66 /* StartView.swift */; };
 		EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E142BACB5BB000C0E66 /* TextView.swift */; };
 		ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */; };
@@ -26,7 +25,6 @@
 		1F3F97592BACF78400AD3405 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		1F3F975B2BACFD6300AD3405 /* AudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioView.swift; sourceTree = "<group>"; };
 		1F3F975D2BAD012900AD3405 /* QuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
-		1FC3DBF82BB1CE670032C3C0 /* FeedbackListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackListRow.swift; sourceTree = "<group>"; };
 		EC6F3E122BAB5601000C0E66 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		EC6F3E142BACB5BB000C0E66 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		ECD72A5C2B7411CB00CED84D /* intersim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intersim.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,7 +49,6 @@
 		ECD72A532B7411CB00CED84D = {
 			isa = PBXGroup;
 			children = (
-				1FC3DBF82BB1CE670032C3C0 /* FeedbackListRow.swift */,
 				ECE58B9E2BAA074400EE5FA1 /* intersim */,
 				ECD72A5D2B7411CB00CED84D /* Products */,
 			);
@@ -170,7 +167,6 @@
 				ECE58BAC2BAA074400EE5FA1 /* Response.swift in Sources */,
 				EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */,
 				1F3F975A2BACF78400AD3405 /* FeedbackView.swift in Sources */,
-				1FC3DBF92BB1CE670032C3C0 /* FeedbackListRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

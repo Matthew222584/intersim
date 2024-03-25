@@ -155,7 +155,7 @@ class Interview {
             var i = 0
             for item in jsonObj {
                 if i % 5 == 0 {
-                    feedback.append("Question ID: " + String((item[0] as! NSNumber).intValue))
+                    feedback.append("Question: " + (item[0] as! String))
                     feedback.append("Response: " + (item[3] as! String))
                 }
                 i += 1
