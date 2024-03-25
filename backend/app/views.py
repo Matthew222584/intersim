@@ -66,7 +66,7 @@ def speechToText(base64_audio_string):
         temp_audio_file.write(audio_data)
         temp_file_path = temp_audio_file.name
         with open(temp_file_path, 'rb') as process_file:
-            speech_recognition_results = speech_to_text.recognize(audio=process_file).get_result()
+            speech_recognition_results = speech_to_text.recognize(audio=process_file, content_type='audio/wav').get_result()
             # transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
             return {"audio": base64_audio_string, "file": temp_file_path, "speech_recognition_results": speech_recognition_results}
 
