@@ -13,7 +13,6 @@ from ibm_watson import SpeechToTextV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from django.core.files.storage import FileSystemStorage
 
-from fastapi import File, UploadFile
 from modelscope.pipelines import pipeline
 from modelscope.utils.constant import Tasks
 import numpy as np
