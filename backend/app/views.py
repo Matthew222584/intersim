@@ -52,24 +52,24 @@ def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_l
     with connection.cursor() as cursor:
         cursor.execute(query, [interview_id, question_id, emotion, confidence_lvl])
 
-def speechToText(base64_audio_string):
-    # good function
-    authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
-    speech_to_text = SpeechToTextV1(
-        authenticator=authenticator
-    )
-    speech_to_text.set_service_url('https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/8ec4f5a4-43d4-4866-a13a-1b11d1a7feb0')
+# def speechToText(base64_audio_string):
+#     # good function
+#     authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
+#     speech_to_text = SpeechToTextV1(
+#         authenticator=authenticator
+#     )
+#     speech_to_text.set_service_url('https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/8ec4f5a4-43d4-4866-a13a-1b11d1a7feb0')
 
-    audio_data = base64.b64decode(base64_audio_string)
+#     audio_data = base64.b64decode(base64_audio_string)
 
-    speech_recognition_results = speech_to_text.recognize(
-        audio=audio_data,
-        model='en-US_BroadbandModel',
-        timestamps=True,
-        word_confidence=True
-        ).get_result()
+#     speech_recognition_results = speech_to_text.recognize(
+#         audio=audio_data,
+#         model='en-US_BroadbandModel',
+#         timestamps=True,
+#         word_confidence=True
+#         ).get_result()
 
-    return {"audio": str(audio_data), "speech_recognition_results": speech_recognition_results}
+#     return {"audio": str(audio_data), "speech_recognition_results": speech_recognition_results}
 
 
 def sentimentAPI(input_text):
@@ -157,16 +157,13 @@ def postanswers(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
-    # if (audio):
-    #     question_answer = speechToText(audio)
-    #     # return JsonResponse({'question_answer': question_answer}, status=201)
-
-    # sentimentAnalysis = (sentimentAPI(question_answer))
-    # for emotion, value in sentimentAnalysis:
-    #     add_to_sentiment_table(username, interview_id, question_id, emotion, value)
-    
-    speechAnalysis = emotionRecognition(audio)
-    add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
+    if (audio):
+        speechAnalysis = emotionRecognition(audio)
+        add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
+    else:
+        sentimentAnalysis = (sentimentAPI(question_answer))
+        for emotion, value in sentimentAnalysis:
+            add_to_sentiment_table(username, interview_id, question_id, emotion, value)
 
     timestamp = datetime.now() 
 
