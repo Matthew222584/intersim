@@ -91,11 +91,15 @@ def getquestions(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
 
-    username = request.GET.get('username')
-    num_questions = request.GET.get('num_questions')
+    try:
+        json_data = json.loads(request.body)
+        username = json_data.get('username')
+        num_questions = json_data.get('num_questions')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
 
-    if username:
-        return JsonResponse({'bob': "hi", 'status': 'success' })
+    # username = request.GET.get('username')
+    # num_questions = request.GET.get('num_questions')
 
     # make sure username and questions are passed in
     if not username or not num_questions:
