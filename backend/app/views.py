@@ -13,7 +13,6 @@ from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 \
     import Features, EmotionOptions
-from fastapi import File, UploadFile
 from modelscope.pipelines import pipeline
 from modelscope.utils.constant import Tasks
 import numpy as np
