@@ -5,10 +5,14 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 from datetime import datetime
+from os.path import join, dirname
+from ibm_watson import SpeechToTextV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from django.core.files.storage import FileSystemStorage
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 \
-    import Features, CategoriesOptions
+    import Features, EmotionOptions
 
 def user_exists(username):
     """
@@ -26,6 +30,33 @@ def user_exists(username):
         row = cursor.fetchone()
         return row[0]
 
+def add_to_sentiment_table(username, interview_id, question_id, emotion, accuracy):
+    query = """
+        INSERT INTO emotionSummary (username, interview_id, question_id, emotion, accuracy)
+        VALUES (%s, %s, %s, %s, %s);
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query, [username, interview_id, question_id, emotion, accuracy])
+
+
+def sentimentAPI(input_text):
+
+    authenticator = IAMAuthenticator('5UoLws0msT8fi8c45kO08Qc_TNJTJoXE9G_MazEx5mZm')
+    natural_language_understanding = NaturalLanguageUnderstandingV1(
+        version='2022-04-07',
+        authenticator=authenticator
+    )
+
+    natural_language_understanding.set_service_url('https://api.us-east.natural-language-understanding.watson.cloud.ibm.com/instances/fc76a36b-a5a5-41c5-a8f6-1bbbbb6330de')
+
+    response = natural_language_understanding.analyze(
+        text=input_text,
+        features=Features(emotion=EmotionOptions())).get_result()
+    emotion_dict = response["emotion"]["document"]["emotion"]
+    out = []
+    for emotion, score in emotion_dict.items():
+        out.append((emotion, score))
+    return out
 
 @csrf_exempt
 def getquestions(request):
@@ -93,6 +124,11 @@ def postanswers(request):
         return JsonResponse({'message': f'Missing required parameter: {e}', 'status': 'fail'}, status=400)
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
+    
+    sentimentAnalysis = (sentimentAPI(question_answer)) 
+
+    for emotion, value in sentimentAnalysis:
+        add_to_sentiment_table(username, interview_id, question_id, emotion, value) 
 
     timestamp = datetime.now() 
 
@@ -104,7 +140,7 @@ def postanswers(request):
         cursor.execute(query, [username, interview_id, question_id, question_answer, timestamp, audio, video_file_path])
 
 
-    return JsonResponse({'status': 'success'}, status=201)
+    return JsonResponse({'status': 'success', "analysis": sentimentAnalysis}, status=201)
 
 @csrf_exempt
 def getusersummary(request):
@@ -137,38 +173,37 @@ def getusersummary(request):
     return JsonResponse({'status': 'success', 'data': rows})
 
 @csrf_exempt
-def getsentiment(request):
+def getfeedback(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
 
     username = request.GET.get('username')
-
-        # Make sure username is passed in
-    if not username:
-        return JsonResponse({'message': 'Username is required', 'status': 'fail'}, status=400)
-
-    # Check if user exists in the database
-    if not user_exists(username):
-        return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
-    
-    response = requests.post('http://3.144.9.248:8000/sentiment/', json={'text': text})
-
-    emotion_dict = response['emotions']
-
-    max_emotion = max(emotion_dict, key=emotion_dict.get)
-    max_score = max(emotion_dict.values())
-
-    # We don't need this thing yet for the skeletal
+    interview_id = request.GET.get('interview_id')
 
     query = """
-        INSERT INTO question_answers ()
-        VALUES (%s, %s, %s, %s, %s, %s, %s);
+        SELECT e.question_id, e.emotion, e.accuracy, qr.question_answer
+        FROM emotionsummary e
+        INNER JOIN question_responses qr ON e.question_id = qr.question_id
+        WHERE e.username = %s
+        AND e.interview_id = %s
+        ORDER BY e.question_id ASC, e.emotion ASC;
     """
 
+    # Execute the SQL query
     with connection.cursor() as cursor:
-        cursor.execute(query, [response[],response[],response[])
+        cursor.execute(query, [username, interview_id])
+        rows = cursor.fetchall()
 
-    return JsonResponse({'status': 'success', 'data': rows})
-
-
-
+    # Prepare JSON response data
+    response_data = []
+    #  for row in rows:
+    #     response_data.append({
+    #        'question': row[0],
+    #        'question_id': row[1],
+    #        'question_answer': row[2],
+    #        'emotion': row[3],
+    #        'accuracy': row[4]
+    #    })
+    
+    # Return JSON response
+    return JsonResponse(rows, safe=False, status=200)

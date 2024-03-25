@@ -23,4 +23,5 @@ urlpatterns = [
     path('getquestions/', views.getquestions, name='getquestions'),
     path('postanswers/', views.postanswers, name='postanswers'),
     path('getusersummary/', views.getusersummary, name='getusersummary'),
+    path('getfeedback/', views.getfeedback, name='getfeedback'),
 ]
