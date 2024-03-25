@@ -35,7 +35,7 @@ class Interview {
             "interview_id": response.interviewID ?? "null",
             "question_id": response.questionID ?? "null",
             "question_answer": response.textResponse ?? "null",
-            "audio": response.audioResponse?.base64EncodedString() ?? "null",
+            "audio": response.audioResponse?.base64EncodedString() ?? "",
             "video_file_path": "null"
         ]
         
