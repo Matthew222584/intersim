@@ -64,7 +64,6 @@ def speechToText(base64_audio_string):
 
     speech_recognition_results = speech_to_text.recognize(
         audio=audio_data,
-        content_type='audio/wav',
         model='en-US_BroadbandModel',
         timestamps=True,
         word_confidence=True
