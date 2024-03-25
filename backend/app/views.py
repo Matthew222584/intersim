@@ -38,7 +38,7 @@ def user_exists(username):
 
 def add_to_sentiment_table(username, interview_id, question_id, emotion, accuracy):
     query = """
-        INSERT INTO emotionSummary (username, interview_id, question_id, emotion, accuracy)
+        INSERT INTO emotionsummary (username, interview_id, question_id, emotion, accuracy)
         VALUES (%s, %s, %s, %s, %s);
     """
     with connection.cursor() as cursor:
@@ -46,7 +46,7 @@ def add_to_sentiment_table(username, interview_id, question_id, emotion, accurac
 
 def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_lvl):
     query = """
-        INSERT INTO speechSummary (interview_id, question_id, emotion, confidence_lvl)
+        INSERT INTO speechsummary (interview_id, question_id, emotion, confidence_lvl)
         VALUES (%s, %s, %s, %s);
     """
     with connection.cursor() as cursor:
@@ -166,8 +166,8 @@ def postanswers(request):
     for emotion, value in sentimentAnalysis:
         add_to_sentiment_table(username, interview_id, question_id, emotion, value)
     
-    # speechAnalysis = emotionRecognition(audio)
-    # add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
+    speechAnalysis = emotionRecognition(audio)
+    add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
 
     timestamp = datetime.now() 
 
@@ -238,19 +238,19 @@ def getfeedback(request):
     return JsonResponse(response_data, safe=False, status=200)
 
 
-# def emotionRecognition(base64_audio_text):
-#     mapper = ["angry", "disgust", "fear", "happy",
-#             "neutral", "other", "sad", "surprised", "unknown"]
-#     inference_pipeline = pipeline(
-#         task=Tasks.emotion_recognition,
-#         model="iic/emotion2vec_base_finetuned", model_revision="v2.0.4")
-#     audio_bytes = base64.b64decode(base64_audio_text)
+def emotionRecognition(base64_audio_text):
+    mapper = ["angry", "disgust", "fear", "happy",
+            "neutral", "other", "sad", "surprised", "unknown"]
+    inference_pipeline = pipeline(
+        task=Tasks.emotion_recognition,
+        model="iic/emotion2vec_base_finetuned", model_revision="v2.0.4")
+    audio_bytes = base64.b64decode(base64_audio_text)
 
-#     rec_result = inference_pipeline(
-#         audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
-#     max_emotion_score = np.argmax(rec_result[0]["scores"]) 
+    rec_result = inference_pipeline(
+        audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
+    max_emotion_score = np.argmax(rec_result[0]["scores"]) 
 
-#     return {
-#         "emotion": mapper[max_emotion_score],
-#         "confidence":rec_result[0]["scores"][max_emotion_score]
-#     }
+    return {
+        "emotion": mapper[max_emotion_score],
+        "confidence":rec_result[0]["scores"][max_emotion_score]
+    }
