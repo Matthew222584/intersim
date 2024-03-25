@@ -157,13 +157,13 @@ def postanswers(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
-    if (audio):
-        speechAnalysis = emotionRecognition(audio)
-        add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
-    else:
-        sentimentAnalysis = (sentimentAPI(question_answer))
-        for emotion, value in sentimentAnalysis:
-            add_to_sentiment_table(username, interview_id, question_id, emotion, value)
+    # if (audio):
+    #     speechAnalysis = emotionRecognition(audio)
+    #     add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
+    # else:
+    sentimentAnalysis = (sentimentAPI(question_answer))
+    for emotion, value in sentimentAnalysis:
+        add_to_sentiment_table(username, interview_id, question_id, emotion, value)
 
     timestamp = datetime.now() 
 
@@ -225,7 +225,7 @@ def getfeedback(request):
         AND e.interview_id = %s
         ORDER BY e.question_id ASC, e.emotion ASC;
     """
-    # TO DO: query to get speech emotion analysis
+    # good query
 
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id])
