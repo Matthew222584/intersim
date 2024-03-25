@@ -13,10 +13,10 @@ from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 \
     import Features, EmotionOptions
-from modelscope.pipelines import pipeline
-from modelscope.utils.constant import Tasks
-import numpy as np
-import base64
+# from modelscope.pipelines import pipeline
+# from modelscope.utils.constant import Tasks
+# import numpy as np
+# import base64
 
 def user_exists(username):
     """
@@ -236,19 +236,19 @@ def getfeedback(request):
     return JsonResponse(response_data, safe=False, status=200)
 
 
-def emotionRecognition(base64_audio_text):
-    mapper = ["angry", "disgust", "fear", "happy",
-            "neutral", "other", "sad", "surprised", "unknown"]
-    inference_pipeline = pipeline(
-        task=Tasks.emotion_recognition,
-        model="iic/emotion2vec_base_finetuned", model_revision="v2.0.4")
-    audio_bytes = base64.b64decode(base64_audio_text)
+# def emotionRecognition(base64_audio_text):
+#     mapper = ["angry", "disgust", "fear", "happy",
+#             "neutral", "other", "sad", "surprised", "unknown"]
+#     inference_pipeline = pipeline(
+#         task=Tasks.emotion_recognition,
+#         model="iic/emotion2vec_base_finetuned", model_revision="v2.0.4")
+#     audio_bytes = base64.b64decode(base64_audio_text)
 
-    rec_result = inference_pipeline(
-        audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
-    max_emotion_score = np.argmax(rec_result[0]["scores"]) 
+#     rec_result = inference_pipeline(
+#         audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
+#     max_emotion_score = np.argmax(rec_result[0]["scores"]) 
 
-    return {
-        "emotion": mapper[max_emotion_score],
-        "confidence":rec_result[0]["scores"][max_emotion_score]
-    }
+#     return {
+#         "emotion": mapper[max_emotion_score],
+#         "confidence":rec_result[0]["scores"][max_emotion_score]
+#     }
