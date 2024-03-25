@@ -231,15 +231,10 @@ def getfeedback(request):
     """
     # TO DO: query to get speech emotion analysis
 
-    # Execute the SQL query
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id])
         response_data = cursor.fetchall()
-
-    # Prepare JSON response data
-    response_data = []
     
-    # Return JSON response
     return JsonResponse(response_data, safe=False, status=200)
 
 
