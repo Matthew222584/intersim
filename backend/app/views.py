@@ -51,6 +51,21 @@ def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_l
     with connection.cursor() as cursor:
         cursor.execute(query, [interview_id, question_id, emotion, confidence_lvl])
 
+def speechToText(base64_audio_string):
+    authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
+    speech_to_text = SpeechToTextV1(
+        authenticator=authenticator
+    )
+    audio_data = base64.b64decode(base64_audio_string)
+    speech_to_text.set_service_url('https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/8ec4f5a4-43d4-4866-a13a-1b11d1a7feb0')
+
+    speech_recognition_results = speech_to_text.recognize(
+        audio=audio_data,
+        model='en-US_BroadbandModel'
+    ).get_result()
+
+    transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
+    return transcript
 
 def sentimentAPI(input_text):
     authenticator = IAMAuthenticator('5UoLws0msT8fi8c45kO08Qc_TNJTJoXE9G_MazEx5mZm')
@@ -137,12 +152,16 @@ def postanswers(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
+    # TO DO add in audio to text conversion
+    if (audio) {
+        question_answer = speech_to_text(audio)
+    }
     sentimentAnalysis = (sentimentAPI(question_answer))
     for emotion, value in sentimentAnalysis:
         add_to_sentiment_table(username, interview_id, question_id, emotion, value)
     
-    speechAnalysis = emotionRecognition(audio)
-    add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
+    # speechAnalysis = emotionRecognition(audio)
+    # add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
 
     timestamp = datetime.now() 
 
@@ -152,7 +171,6 @@ def postanswers(request):
     """
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id, question_id, question_answer, timestamp, audio, video_file_path])
-
 
     return JsonResponse({'status': 'success', "analysis": sentimentAnalysis}, status=201)
 
@@ -204,6 +222,8 @@ def getfeedback(request):
         AND e.interview_id = %s
         ORDER BY e.question_id ASC, e.emotion ASC;
     """
+
+    # TO DO: query to get speech emotion analysis
 
     # Execute the SQL query
     with connection.cursor() as cursor:
