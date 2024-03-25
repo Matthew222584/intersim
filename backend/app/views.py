@@ -219,7 +219,6 @@ def getfeedback(request):
 
     username = request.GET.get('username')
     interview_id = request.GET.get('interview_id')
-    return JsonResponse({"username": username, "interview_id": interview_id}, safe=False, status=200)
 
     query = """
         SELECT e.question, e.emotion, e.accuracy, qr.question_answer
