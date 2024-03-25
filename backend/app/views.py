@@ -53,6 +53,7 @@ def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_l
         cursor.execute(query, [interview_id, question_id, emotion, confidence_lvl])
 
 def speechToText(base64_audio_string):
+    # good function
     authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
     speech_to_text = SpeechToTextV1(
         authenticator=authenticator
@@ -64,12 +65,11 @@ def speechToText(base64_audio_string):
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as temp_audio_file:
         temp_audio_file.write(audio_data)
         temp_file_path = temp_audio_file.name
-    with open(temp_file_path, 'rb') as process_file:
-        speech_recognition_results = speech_to_text.recognize(audio=process_file).get_result()
-    
-    transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
-    
-    return transcript
+        with open(temp_file_path, 'rb') as process_file:
+            speech_recognition_results = speech_to_text.recognize(audio=process_file).get_result()
+            transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
+            
+            return transcript
 
 
 def sentimentAPI(input_text):
@@ -160,6 +160,7 @@ def postanswers(request):
     # TO DO add in audio to text conversion
     if (audio):
         question_answer = speechToText(audio)
+        return JsonResponse({'question_answer': question_answer}, status=201)
 
     sentimentAnalysis = (sentimentAPI(question_answer))
     for emotion, value in sentimentAnalysis:
