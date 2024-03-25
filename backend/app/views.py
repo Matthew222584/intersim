@@ -150,10 +150,15 @@ def getsentiment(request):
     # Check if user exists in the database
     if not user_exists(username):
         return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
-
-
-    # Does it return dict or json?    
+    
     response = requests.post('http://3.144.9.248:8000/sentiment/', json={'text': text})
+
+    emotion_dict = response['emotions']
+
+    max_emotion = max(emotion_dict, key=emotion_dict.get)
+    max_score = max(emotion_dict.values())
+
+    # We don't need this thing yet for the skeletal
 
     query = """
         INSERT INTO question_answers ()
