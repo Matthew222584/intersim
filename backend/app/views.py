@@ -68,7 +68,7 @@ def speechToText(base64_audio_string):
         with open(temp_file_path, 'rb') as process_file:
             speech_recognition_results = speech_to_text.recognize(audio=process_file).get_result()
             # transcript = speech_recognition_results["results"][0]['alternatives'][0]['transcript']
-            return speech_recognition_results
+            return {"audio": base64_audio_string, "file": temp_file_path, "speech_recognition_results": speech_recognition_results}
 
 
 def sentimentAPI(input_text):
