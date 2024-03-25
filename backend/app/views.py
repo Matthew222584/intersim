@@ -13,6 +13,11 @@ from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 \
     import Features, EmotionOptions
+from fastapi import File, UploadFile
+from modelscope.pipelines import pipeline
+from modelscope.utils.constant import Tasks
+import numpy as np
+import base64
 
 def user_exists(username):
     """
@@ -38,9 +43,16 @@ def add_to_sentiment_table(username, interview_id, question_id, emotion, accurac
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id, question_id, emotion, accuracy])
 
+def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_lvl):
+    query = """
+        INSERT INTO speechSummary (interview_id, question_id, emotion, confidence_lvl)
+        VALUES (%s, %s, %s, %s);
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query, [interview_id, question_id, emotion, confidence_lvl])
+
 
 def sentimentAPI(input_text):
-
     authenticator = IAMAuthenticator('5UoLws0msT8fi8c45kO08Qc_TNJTJoXE9G_MazEx5mZm')
     natural_language_understanding = NaturalLanguageUnderstandingV1(
         version='2022-04-07',
@@ -58,11 +70,11 @@ def sentimentAPI(input_text):
         out.append((emotion, score))
     return out
 
+
 @csrf_exempt
 def getquestions(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
-
 
     username = request.GET.get('username')
     num_questions = request.GET.get('num_questions')
@@ -78,7 +90,6 @@ def getquestions(request):
     if not user_exists(username):
         return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
     
-
     # generate question_id and questions; making sure the questions arent repeated
     query = """
         SELECT question_id, question
@@ -107,6 +118,7 @@ def getquestions(request):
     # return data in JSON 
     return JsonResponse({'interview_id': interview_id, 'questions':question_data, 'status': 'success' })
 
+
 @csrf_exempt
 def postanswers(request):
     if request.method != 'POST':
@@ -125,10 +137,12 @@ def postanswers(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
-    sentimentAnalysis = (sentimentAPI(question_answer)) 
-
+    sentimentAnalysis = (sentimentAPI(question_answer))
     for emotion, value in sentimentAnalysis:
-        add_to_sentiment_table(username, interview_id, question_id, emotion, value) 
+        add_to_sentiment_table(username, interview_id, question_id, emotion, value)
+    
+    speechAnalysis = emotionRecognition(audio)
+    add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
 
     timestamp = datetime.now() 
 
@@ -141,6 +155,7 @@ def postanswers(request):
 
 
     return JsonResponse({'status': 'success', "analysis": sentimentAnalysis}, status=201)
+
 
 @csrf_exempt
 def getusersummary(request):
@@ -172,6 +187,7 @@ def getusersummary(request):
 
     return JsonResponse({'status': 'success', 'data': rows})
 
+
 @csrf_exempt
 def getfeedback(request):
     if request.method != 'GET':
@@ -181,7 +197,7 @@ def getfeedback(request):
     interview_id = request.GET.get('interview_id')
 
     query = """
-        SELECT e.question_id, e.emotion, e.accuracy, qr.question_answer
+        SELECT e.question, e.emotion, e.accuracy, qr.question_answer
         FROM emotionsummary e
         INNER JOIN question_responses qr ON e.question_id = qr.question_id
         WHERE e.username = %s
@@ -192,18 +208,28 @@ def getfeedback(request):
     # Execute the SQL query
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id])
-        rows = cursor.fetchall()
+        response_data = cursor.fetchall()
 
     # Prepare JSON response data
     response_data = []
-    #  for row in rows:
-    #     response_data.append({
-    #        'question': row[0],
-    #        'question_id': row[1],
-    #        'question_answer': row[2],
-    #        'emotion': row[3],
-    #        'accuracy': row[4]
-    #    })
     
     # Return JSON response
-    return JsonResponse(rows, safe=False, status=200)
+    return JsonResponse(response_data, safe=False, status=200)
+
+
+def emotionRecognition(base64_audio_text):
+    mapper = ["angry", "disgust", "fear", "happy",
+            "neutral", "other", "sad", "surprised", "unknown"]
+    inference_pipeline = pipeline(
+        task=Tasks.emotion_recognition,
+        model="iic/emotion2vec_base_finetuned", model_revision="v2.0.4")
+    audio_bytes = base64.b64decode(base64_audio_text)
+
+    rec_result = inference_pipeline(
+        audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
+    max_emotion_score = np.argmax(rec_result[0]["scores"]) 
+
+    return {
+        "emotion": mapper[max_emotion_score],
+        "confidence":rec_result[0]["scores"][max_emotion_score]
+    }
