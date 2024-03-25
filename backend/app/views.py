@@ -221,9 +221,10 @@ def getfeedback(request):
     interview_id = request.GET.get('interview_id')
 
     query = """
-        SELECT e.question, e.emotion, e.accuracy, qr.question_answer
+        SELECT dq.question, e.emotion, e.accuracy, qr.question_answer
         FROM emotionsummary e
         INNER JOIN question_responses qr ON e.question_id = qr.question_id
+        INNER JOIN default_questions dq ON e.question_id = dq.question_id
         WHERE e.username = %s
         AND e.interview_id = %s
         ORDER BY e.question_id ASC, e.emotion ASC;
