@@ -8,7 +8,19 @@
 import SwiftUI
 
 struct FeedbackView: View {
+    let interviewInstance = Interview.shared
+    
     var body: some View {
-        Text(Interview.shared.postFeedback())
+        NavigationView {
+            List(interviewInstance.feedback!, id: \.self) { item in
+                Text(item)
+            }
+            .refreshable {
+                interviewInstance.getFeedback()
+            }
+        }
+        .onAppear() {
+            interviewInstance.getFeedback()
+        }
     }
 }
