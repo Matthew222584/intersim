@@ -154,7 +154,7 @@ def postanswers(request):
     
     # TO DO add in audio to text conversion
     if (audio) {
-        question_answer = speech_to_text(audio)
+        question_answer = speechToText(audio)
     }
     sentimentAnalysis = (sentimentAPI(question_answer))
     for emotion, value in sentimentAnalysis:
