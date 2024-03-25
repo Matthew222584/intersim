@@ -157,14 +157,13 @@ def postanswers(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
-    # TO DO add in audio to text conversion
-    if (audio):
-        question_answer = speechToText(audio)
-        # return JsonResponse({'question_answer': question_answer}, status=201)
+    # if (audio):
+    #     question_answer = speechToText(audio)
+    #     # return JsonResponse({'question_answer': question_answer}, status=201)
 
-    sentimentAnalysis = (sentimentAPI(question_answer))
-    for emotion, value in sentimentAnalysis:
-        add_to_sentiment_table(username, interview_id, question_id, emotion, value)
+    # sentimentAnalysis = (sentimentAPI(question_answer))
+    # for emotion, value in sentimentAnalysis:
+    #     add_to_sentiment_table(username, interview_id, question_id, emotion, value)
     
     speechAnalysis = emotionRecognition(audio)
     add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
