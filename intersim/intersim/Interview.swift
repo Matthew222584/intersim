@@ -105,7 +105,10 @@ class Interview {
     }
     
     func getQuestion(index: Int) -> String {
-        return questions[index]
+        if (!questions.isEmpty) {
+            return questions[index]
+        }
+        return "No question received, try again."
     }
     
     func getQuestionsCount() -> Int {
