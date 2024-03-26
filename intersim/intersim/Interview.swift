@@ -14,7 +14,7 @@ class Interview {
     private var questionIds: [String] = []
     private var numQuestions = 0
     private var interviewId = 0
-    private let serverUrl = "https://3.144.9.248/"
+    private let serverUrl = "https://3.145.41.160/"
     var feedback: [String] = []
     
     private init() {
