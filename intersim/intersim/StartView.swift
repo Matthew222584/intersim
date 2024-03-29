@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StartView: View {
     @Binding var isPresented: Bool
+    @Binding var username: String
     @State private var isPresenting = false
     @State private var showQuestion = false
     @State private var showText = false
@@ -46,7 +47,7 @@ struct StartView: View {
             .navigationTitle("Start")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $showQuestion) {
-                QuestionView(showTextView: showText)
+                QuestionView(showTextView: showText, username: $username)
             }
         }
     }

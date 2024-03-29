@@ -14,6 +14,7 @@ class Interview {
     private var questionIds: [String] = []
     private var numQuestions = 0
     private var interviewId = 0
+    private var username = ""
     private let serverUrl = "https://3.145.41.160/"
     var feedback: [String] = []
     
@@ -62,7 +63,7 @@ class Interview {
             return
         }
         apiUrl.queryItems = [
-            URLQueryItem(name: "username", value: "testuser"),
+            URLQueryItem(name: "username", value: username),
             URLQueryItem(name: "num_questions", value: "2")
         ]
         
@@ -169,5 +170,10 @@ class Interview {
             self.feedback = feedback
             print(feedback)
         }.resume()
+    }
+    
+    func setUsername(username: String) {
+        self.username = username
+        return
     }
 }
