@@ -10,7 +10,6 @@ import SwiftUI
 struct QuestionView: View {
     let interviewInstance = Interview.shared
     var showTextView: Bool
-    @Binding var username: String
     @State private var questionIndex = 0
     @State private var presentFeedbackView = false
     @State private var textResponse = "Type your response here."
@@ -20,7 +19,7 @@ struct QuestionView: View {
     func SubmitButton() -> some View {
         Button {
             var response = Response()
-            response.username = username
+            response.username = User.shared.getUsername()
             response.interviewID = interviewInstance.getInterviewId()
             response.questionID = interviewInstance.getQuestionId(index: self.questionIndex)
             

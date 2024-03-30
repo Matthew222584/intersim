@@ -19,6 +19,7 @@ class Interview {
     var feedback: [String] = []
     
     private init() {
+        self.username = User.shared.getUsername()
         fetchQuestions()
     }
     
