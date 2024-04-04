@@ -34,11 +34,11 @@ class Interview {
         
         let body: [String: Any] = [
             "username": response.username,
-            "interview_id": response.interviewID ?? "null",
-            "question_id": response.questionID ?? "null",
-            "question_answer": response.textResponse ?? "null",
+            "interview_id": response.interviewID ,
+            "question_id": response.questionID,
+            "question_answer": response.textResponse ?? "",
             "audio": response.audioResponse?.base64EncodedString() ?? "",
-            "video_file_path": "null"
+            "video_file_path": ""
         ]
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
@@ -52,7 +52,7 @@ class Interview {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error: \(error)")
-            } else if let data = data, let response = response as? HTTPURLResponse {
+            } else if let _ = data, let response = response as? HTTPURLResponse {
                 print("Response: \(response.statusCode)")
             }
         }.resume()
@@ -106,26 +106,7 @@ class Interview {
         }.resume()
     }
     
-    func getQuestion(index: Int) -> String {
-        if (!questions.isEmpty) {
-            return questions[index]
-        }
-        return "No question received, try again."
-    }
-    
-    func getQuestionsCount() -> Int {
-        return numQuestions
-    }
-    
-    func getInterviewId() -> Int {
-        return interviewId
-    }
-    
-    func getQuestionId(index: Int) -> Int {
-        return Int(questionIds[index])!
-    }
-    
-    func getFeedback() {
+    func fetchFeedback() {
         guard var apiUrl = URLComponents(string: "\(serverUrl)getfeedback/") else {
             print("getFeedback: Bad URL")
             return
@@ -173,8 +154,24 @@ class Interview {
         }.resume()
     }
     
+    // Getters and setters
+    func getQuestion(index: Int) -> String {
+        return questions[index]
+    }
+    
+    func getQuestionsCount() -> Int {
+        return numQuestions
+    }
+    
+    func getInterviewId() -> Int {
+        return interviewId
+    }
+    
+    func getQuestionId(index: Int) -> Int {
+        return Int(questionIds[index])!
+    }
+    
     func setUsername(username: String) {
         self.username = username
-        return
     }
 }

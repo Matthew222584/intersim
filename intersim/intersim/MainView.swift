@@ -17,7 +17,7 @@ struct MainView: View {
             userInstance.setUsername(username: "testuser")
         } label: {
             Image(systemName: "person")
-            Text("Continue as guest.")
+            Text("Continue as guest")
         }
         .navigationTitle("intersim")
         .navigationBarTitleDisplayMode(.inline)

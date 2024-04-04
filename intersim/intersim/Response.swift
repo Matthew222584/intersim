@@ -8,9 +8,9 @@
 import Foundation
 
 struct Response {
-    var username = "testuser"
-    var interviewID: Int?
-    var questionID: Int?
+    var username: String
+    var interviewID: Int
+    var questionID: Int
     var textResponse: String?
     var audioResponse: Data?
 }

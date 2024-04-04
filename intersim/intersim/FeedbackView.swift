@@ -21,12 +21,12 @@ struct FeedbackView: View {
                 Text(item)
             }
             .refreshable {
-                interviewInstance.getFeedback()
+                interviewInstance.fetchFeedback()
                 updateItems()
             }
         }
         .onAppear() {
-            interviewInstance.getFeedback()
+            interviewInstance.fetchFeedback()
         }
     }
 }
