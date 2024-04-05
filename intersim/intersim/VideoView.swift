@@ -1,5 +1,5 @@
 //
-//  QuestionView.swift
+//  VideoView.swift
 //  intersim
 //
 //  Created by Kyle on 4/1/24.
@@ -13,6 +13,11 @@ struct VideoView: View {
     private var videoRecorder: VideoRecorder = VideoRecorder()
     @State private var isRecording = false
     @State private var isPreviewReady = false
+    var didFinishRecording: ((URL) -> Void)?
+    
+    init(didFinishRecording: ((URL) -> Void)? = nil) {
+        self.didFinishRecording = didFinishRecording
+    }
 
     var body: some View {
         VStack {
@@ -21,7 +26,11 @@ struct VideoView: View {
             }
             
             Button {
-                isRecording ? videoRecorder.stopRecording() : videoRecorder.startRecording()
+                if isRecording {
+                    videoRecorder.stopRecording()
+                } else {
+                    videoRecorder.startRecording()
+                }
                 isRecording.toggle()
             } label: {
                 Text(isRecording ? "Stop recording" : "Start recording")
@@ -33,22 +42,27 @@ struct VideoView: View {
                 isPreviewReady = true
             }
         }
+        .onReceive(videoRecorder.$videoURL) { videoURL in
+            if let url = videoURL {
+                print(url)
+                didFinishRecording?(url)
+            }
+        }
     }
 }
 
 class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableObject {
     private var captureSession: AVCaptureSession?
     private let fileOutput = AVCaptureMovieFileOutput()
-    private var outputFileURL: URL?
-    
     var previewLayer: AVCaptureVideoPreviewLayer?
     @Published var isSetupFinished = false
-    
+    @Published var videoURL: URL?
+
     override init() {
         super.init()
         setupCaptureSession()
     }
-
+    
     private func setupCaptureSession() {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
@@ -91,7 +105,6 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let fileURL = documentsURL.appendingPathComponent(UUID().uuidString).appendingPathExtension("mov")
             self.fileOutput.startRecording(to: fileURL, recordingDelegate: self)
-            self.outputFileURL = fileURL
         }
     }
 
@@ -108,6 +121,8 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
                 return
             }
 
+            self.videoURL = outputFileURL
+            
             PHPhotoLibrary.requestAuthorization { status in
                 guard status == .authorized else { return }
                 PHPhotoLibrary.shared().performChanges {
