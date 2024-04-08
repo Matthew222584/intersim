@@ -18,6 +18,7 @@ from ibm_watson.natural_language_understanding_v1 \
 # import numpy as np
 import base64
 import tempfile
+from pydub import AudioSegment
 
 
 def user_exists(username):
@@ -52,24 +53,30 @@ def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_l
     with connection.cursor() as cursor:
         cursor.execute(query, [interview_id, question_id, emotion, confidence_lvl])
 
-# def speechToText(base64_audio_string):
-#     # good function
-#     authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
-#     speech_to_text = SpeechToTextV1(
-#         authenticator=authenticator
-#     )
-#     speech_to_text.set_service_url('https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/8ec4f5a4-43d4-4866-a13a-1b11d1a7feb0')
+def speechToText(base64_audio_string):
 
-#     audio_data = base64.b64decode(base64_audio_string)
+    authenticator = IAMAuthenticator('pIG-F8xSZWLOaYwiZDIe0-ITjWw7Rk8M7c9Vzqq9bi8s')
+    speech_to_text = SpeechToTextV1(
+        authenticator=authenticator
+    )
+    speech_to_text.set_service_url('https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/8ec4f5a4-43d4-4866-a13a-1b11d1a7feb0')
 
-#     speech_recognition_results = speech_to_text.recognize(
-#         audio=audio_data,
-#         model='en-US_BroadbandModel',
-#         timestamps=True,
-#         word_confidence=True
-#         ).get_result()
+    audio_data = base64.b64decode(base64_audio_string)
 
-#     return {"audio": str(audio_data), "speech_recognition_results": speech_recognition_results}
+    with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_audio_file:
+        temp_audio_file_name = temp_audio_file.name
+        temp_audio_file.write(audio_data)
+        
+    audio_segment = AudioSegment.from_file(temp_audio_file_name)
+    converted_temp_audio_file_name = temp_audio_file_name + '.flac'
+    audio_segment.export(converted_temp_audio_file_name, format='flac')
+    
+    with open(converted_temp_audio_file_name, 'rb') as audio_file:
+        speech_recognition_results = speech_to_text.recognize(
+            audio=audio_file,
+        ).get_result()
+    
+    return {"audio": str(audio_data), "speech_recognition_results": speech_recognition_results}
 
 
 def sentimentAPI(input_text):
