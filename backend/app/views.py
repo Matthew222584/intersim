@@ -167,12 +167,11 @@ def postanswers(request):
     
     if (audio):
         speechEmotionResults = speech_emotion_analysis(audio)
-        add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
-    else:
-        sentimentAnalysis = (sentimentAPI(question_answer))
-
-        for emotion, value in sentimentAnalysis:
-            add_to_sentiment_table(username, interview_id, question_id, emotion, value)
+        # add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
+    # else:
+    #     sentimentAnalysis = (sentimentAPI(question_answer))
+    #     for emotion, value in sentimentAnalysis:
+    #         add_to_sentiment_table(username, interview_id, question_id, emotion, value)
 
     timestamp = datetime.now() 
 
@@ -246,7 +245,7 @@ def getfeedback(request):
 def speech_emotion_analysis(base64_audio_string):
     url = 'https://54.242.14.251/speech_emotion_analysis/'
     data = {'audio': base64_audio_string}
-    response = requests.post(url, json=data)
+    response = requests.post(url, json=data, verify=False)
 
     if response.status_code == 200:
         return response.json()
