@@ -19,6 +19,7 @@ from ibm_watson.natural_language_understanding_v1 \
 import base64
 import tempfile
 from pydub import AudioSegment
+import requests
 
 
 def user_exists(username):
@@ -164,13 +165,14 @@ def postanswers(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
-    # if (audio):
-    #     speechAnalysis = emotionRecognition(audio)
-    #     add_to_speech_emotion_table(interview_id, question_id, speechAnalysis["emotion"], speechAnalysis["confidence"])
-    # else:
-    sentimentAnalysis = (sentimentAPI(question_answer))
-    for emotion, value in sentimentAnalysis:
-        add_to_sentiment_table(username, interview_id, question_id, emotion, value)
+    if (audio):
+        speechEmotionResults = speech_emotion_analysis(audio)
+        add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
+    else:
+        sentimentAnalysis = (sentimentAPI(question_answer))
+
+        for emotion, value in sentimentAnalysis:
+            add_to_sentiment_table(username, interview_id, question_id, emotion, value)
 
     timestamp = datetime.now() 
 
@@ -241,19 +243,12 @@ def getfeedback(request):
     return JsonResponse(response_data, safe=False, status=200)
 
 
-def emotionRecognition(base64_audio_text):
-    mapper = ["angry", "disgust", "fear", "happy",
-            "neutral", "other", "sad", "surprised", "unknown"]
-    inference_pipeline = pipeline(
-        task=Tasks.emotion_recognition,
-        model="iic/emotion2vec_base_finetuned", model_revision="v2.0.4")
-    audio_bytes = base64.b64decode(base64_audio_text)
+def speech_emotion_analysis(base64_audio_string):
+    url = 'https://54.242.14.251/speech_emotion_analysis/'
+    data = {'audio': base64_audio_string}
+    response = requests.post(url, json=data)
 
-    rec_result = inference_pipeline(
-        audio_bytes, output_dir="./outputs", granularity="utterance", extract_embedding=False)
-    max_emotion_score = np.argmax(rec_result[0]["scores"]) 
-
-    return {
-        "emotion": mapper[max_emotion_score],
-        "confidence":rec_result[0]["scores"][max_emotion_score]
-    }
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print('Error running speech emotion analysis with response code ', response.status_code)
