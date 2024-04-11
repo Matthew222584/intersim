@@ -168,7 +168,9 @@ def postanswers(request):
     if (audio):
         # TODO: turn base64 audio string to text
         question_answer = speechToText(audio)
+        print(question_answer)
         speechEmotionResults = speech_emotion_analysis(audio)
+        print('speech emoiton api call')
         add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
     # elif (video): do later
 
