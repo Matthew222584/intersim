@@ -76,8 +76,8 @@ def speechToText(base64_audio_string):
         speech_recognition_results = speech_to_text.recognize(
             audio=audio_file,
         ).get_result()
-    
-    return {"audio": str(audio_data), "speech_recognition_results": speech_recognition_results}
+
+    return speech_recognition_results['results'][0]['alternatives'][0]['transcript']
 
 
 def sentimentAPI(input_text):
@@ -167,14 +167,15 @@ def postanswers(request):
     
     if (audio):
         # TODO: turn base64 audio string to text
+        question_answer = speechToText(audio)
         speechEmotionResults = speech_emotion_analysis(audio)
         add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
     # elif (video): do later
 
     # TODO: run this code on question_answer, which should definitely be a filled out text string by this point
-    #     sentimentAnalysis = (sentimentAPI(question_answer))
-    #     for emotion, value in sentimentAnalysis:
-    #         add_to_sentiment_table(username, interview_id, question_id, emotion, value)
+    sentimentAnalysis = (sentimentAPI(question_answer))
+    for emotion, value in sentimentAnalysis:
+        add_to_sentiment_table(username, interview_id, question_id, emotion, value)
 
     timestamp = datetime.now() 
 
