@@ -15,6 +15,7 @@
 		EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E122BAB5601000C0E66 /* StartView.swift */; };
 		EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E142BACB5BB000C0E66 /* TextView.swift */; };
 		ECC77C382BB7AC0200716697 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC77C372BB7AC0200716697 /* User.swift */; };
+		ECCC2C9D2BC6DF8A00C3726C /* DefaultButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCC2C9C2BC6DF8A00C3726C /* DefaultButtonStyle.swift */; };
 		ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */; };
 		ECE58BA92BAA074400EE5FA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */; };
 		ECE58BAA2BAA074400EE5FA1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA22BAA074400EE5FA1 /* Preview Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		EC6F3E122BAB5601000C0E66 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		EC6F3E142BACB5BB000C0E66 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		ECC77C372BB7AC0200716697 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		ECCC2C9C2BC6DF8A00C3726C /* DefaultButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButtonStyle.swift; sourceTree = "<group>"; };
 		ECD72A5C2B7411CB00CED84D /* intersim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intersim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = swiftUIIntersimApp.swift; sourceTree = "<group>"; };
 		ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				1F3F97552BACE4D800AD3405 /* Interview.swift */,
 				ECE58BA42BAA074400EE5FA1 /* Response.swift */,
 				ECC77C372BB7AC0200716697 /* User.swift */,
+				ECCC2C9C2BC6DF8A00C3726C /* DefaultButtonStyle.swift */,
 			);
 			path = intersim;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F3F975C2BACFD6300AD3405 /* AudioView.swift in Sources */,
+				ECCC2C9D2BC6DF8A00C3726C /* DefaultButtonStyle.swift in Sources */,
 				ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */,
 				EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */,
 				ECE58BAD2BAA074400EE5FA1 /* MainView.swift in Sources */,
@@ -308,7 +312,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"intersim/Preview Content\"";
-				DEVELOPMENT_TEAM = UC2GPNLS8S;
+				DEVELOPMENT_TEAM = 8YDK9GMM7X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to record video.";
@@ -341,7 +345,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"intersim/Preview Content\"";
-				DEVELOPMENT_TEAM = UC2GPNLS8S;
+				DEVELOPMENT_TEAM = 8YDK9GMM7X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to record video.";
