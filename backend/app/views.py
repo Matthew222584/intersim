@@ -256,12 +256,12 @@ def getfeedback(request):
                 WHERE sm.interview_id = %s AND sm.question_id = %s
             """
             cursor.execute(speech_emotion_query, [interview_id, question_id])
-            sentiment_query_results = cursor.fetchall()
+            speech_emotion_query_results = cursor.fetchall()
 
             question_response = {
                 'question': question,
                 'sentiment results': sentiment_query_results,
-                'speech emotion results': sentiment_query_results
+                'speech emotion results': speech_emotion_query_results
             }
             response_data.append(question_response)
     
