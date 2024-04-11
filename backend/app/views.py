@@ -225,19 +225,45 @@ def getfeedback(request):
     interview_id = request.GET.get('interview_id')
 
     query = """
-        SELECT dq.question, e.emotion, e.accuracy, qr.question_answer
-        FROM emotionsummary e
-        INNER JOIN question_responses qr ON e.question_id = qr.question_id
-        INNER JOIN default_questions dq ON e.question_id = dq.question_id
-        WHERE e.username = %s
-        AND e.interview_id = %s
-        ORDER BY e.question_id ASC, e.emotion ASC;
+        SELECT qr.question_id, dq.question
+        FROM question_responses qr
+        INNER JOIN default_questions dq ON qr.question_id = dq.question_id
+        WHERE qr.interview_id = %s
+        ORDER BY qr.question_id ASC;
     """
-    # good query
+    response_data = []
 
     with connection.cursor() as cursor:
-        cursor.execute(query, [username, interview_id])
-        response_data = cursor.fetchall()
+        cursor.execute(query, [interview_id])
+        asked_questions_info = cursor.fetchall()
+
+        for question_info in asked_questions_info:
+            question_id = question_info[0]
+            question = question_info[1]
+
+            sentiment_query = """
+                SELECT e.emotion, e.accuracy
+                FROM emotionsummary e
+                WHERE e.interview_id = %s AND e.question_id = %s
+                ORDER BY e.emotion ASC;
+            """
+            cursor.execute(sentiment_query, [interview_id, question_id])
+            sentiment_query_results = cursor.fetchall()
+
+            speech_emotion_query = """
+                SELECT sm.emotion, sm.confidence_lvl
+                FROM speech_emotion_results sm
+                WHERE sm.interview_id = %s AND sm.question_id = %s
+            """
+            cursor.execute(speech_emotion_query, [interview_id, question_id])
+            sentiment_query_results = cursor.fetchall()
+
+            question_response = {
+                'question': question,
+                'sentiment results': sentiment_query_results,
+                'speech emotion results': sentiment_query_results
+            }
+            response_data.append(question_response)
     
     return JsonResponse(response_data, safe=False, status=200)
 
