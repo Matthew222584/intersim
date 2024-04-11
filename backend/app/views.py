@@ -46,9 +46,9 @@ def add_to_sentiment_table(username, interview_id, question_id, emotion, accurac
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id, question_id, emotion, accuracy])
 
-def add_to_speech_summary_table(interview_id, question_id, emotion, confidence_lvl):
+def add_to_speech_emotion_table(interview_id, question_id, emotion, confidence_lvl):
     query = """
-        INSERT INTO speechsummary (interview_id, question_id, emotion, confidence_lvl)
+        INSERT INTO speech_emotion_results (interview_id, question_id, emotion, confidence_lvl)
         VALUES (%s, %s, %s, %s);
     """
     with connection.cursor() as cursor:
@@ -167,7 +167,7 @@ def postanswers(request):
     
     if (audio):
         speechEmotionResults = speech_emotion_analysis(audio)
-        # add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
+        add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
     # else:
     #     sentimentAnalysis = (sentimentAPI(question_answer))
     #     for emotion, value in sentimentAnalysis:
@@ -182,7 +182,7 @@ def postanswers(request):
     with connection.cursor() as cursor:
         cursor.execute(query, [username, interview_id, question_id, question_answer, timestamp, audio, video_file_path])
 
-    return JsonResponse({'status': 'success', "analysis": sentimentAnalysis}, status=201)
+    return JsonResponse({'status': 'success'}, status=201)
 
 
 @csrf_exempt
