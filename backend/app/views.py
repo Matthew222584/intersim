@@ -166,9 +166,12 @@ def postanswers(request):
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
     if (audio):
+        # TODO: turn base64 audio string to text
         speechEmotionResults = speech_emotion_analysis(audio)
         add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
-    # else:
+    # elif (video): do later
+
+    # TODO: run this code on question_answer, which should definitely be a filled out text string by this point
     #     sentimentAnalysis = (sentimentAPI(question_answer))
     #     for emotion, value in sentimentAnalysis:
     #         add_to_sentiment_table(username, interview_id, question_id, emotion, value)
