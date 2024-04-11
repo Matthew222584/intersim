@@ -260,8 +260,8 @@ def getfeedback(request):
 
             question_response = {
                 'question': question,
-                'sentiment results': sentiment_query_results,
-                'speech emotion results': {'top_emotion': speech_emotion_query_results[0],
+                'sentiment_results': sentiment_query_results,
+                'speech_emotion_results': {'top_emotion': speech_emotion_query_results[0],
                                            'confidence_lvl': speech_emotion_query_results[1]}
             }
             response_data.append(question_response)
