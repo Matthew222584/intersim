@@ -70,8 +70,11 @@ struct QuestionView: View {
     
     var body: some View {
         VStack {
+            Spacer()
             Text(interviewInstance.getQuestion(index: self.questionIndex))
+            Spacer()
             presentView()
+            Spacer()
         }
         .toolbar {
             ToolbarItem(placement:.navigationBarTrailing) {

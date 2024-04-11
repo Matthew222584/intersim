@@ -50,18 +50,23 @@ struct StartView: View {
     
     var body: some View {
         VStack {
-            Text("Choose an interview type")
+            Spacer()
+            Text("Choose an interview type.")
                 .padding(.top, 30.0)
-            HStack {
+                .font(.system(size: 40))
+            Spacer()
+            VStack {
                 TextButton()
                 AudioButton()
                 VideoButton()
             }
+            Spacer()
             .navigationTitle("Start")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .navigationDestination(isPresented: $showQuestion) {
                 QuestionView(showViews: showViews)
             }
         }
+        .buttonStyle(DefaultButtonStyle())
     }
 }
