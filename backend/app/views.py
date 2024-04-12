@@ -262,14 +262,17 @@ def getfeedback(request):
                 WHERE sm.interview_id = %s AND sm.question_id = %s
             """
             cursor.execute(speech_emotion_query, [interview_id, question_id])
-            speech_emotion_query_results = cursor.fetchone()
+            speech_emotion_query_result = cursor.fetchone()
 
             question_response = {
                 'question': question,
                 'sentiment_results': sentiment_query_results,
-                'speech_emotion_results': {'top_emotion': speech_emotion_query_results[0],
-                                           'confidence_lvl': speech_emotion_query_results[1]}
             }
+
+            if speech_emotion_query_result:
+                question_response['speech_emotion_results'] = {'top_emotion': speech_emotion_query_result[0],
+                                                               'confidence_lvl': speech_emotion_query_result[1]}
+
             response_data.append(question_response)
     
     return JsonResponse(response_data, safe=False, status=200)
