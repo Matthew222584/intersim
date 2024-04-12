@@ -15,7 +15,8 @@ class Interview {
     private var numQuestions = 0
     private var interviewId = 0
     private var username = ""
-    private let serverUrl = "https://3.145.41.160/"
+    // old 3.145.41.160
+    private let serverUrl = "https://13.58.178.47/"
     var feedback: [String] = []
     
     private init() {
@@ -132,6 +133,7 @@ class Interview {
                 return
             }
             
+            debugPrint(data)
             guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [[Any]] else {
                 print("getFeedback: failed JSON deserialization")
                 return
