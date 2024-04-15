@@ -226,9 +226,32 @@ def getusersummary(request):
 def getfeedback(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
+    username = request.GET.get('username')
+    interview_id = request.GET.get('interview_id')
+    query = """
+        SELECT dq.question, e.emotion, e.accuracy, qr.question_answer
+        FROM emotionsummary e
+        INNER JOIN question_responses qr ON e.question_id = qr.question_id
+        INNER JOIN default_questions dq ON e.question_id = dq.question_id
+        WHERE e.username = %s
+        AND e.interview_id = %s
+        ORDER BY e.question_id ASC, e.emotion ASC;
+    """
+    # good query
+    with connection.cursor() as cursor:
+        cursor.execute(query, [username, interview_id])
+        response_data = cursor.fetchall()
+    
+    return JsonResponse(response_data, safe=False, status=200)
+
+
+    if request.method != 'GET':
+        return HttpResponse(status=404)
 
     username = request.GET.get('username')
     interview_id = request.GET.get('interview_id')
+    print("hello world")
+    return JsonResponse({'status': 'success'})
 
     query = """
         SELECT qr.question_id, dq.question
@@ -237,7 +260,7 @@ def getfeedback(request):
         WHERE qr.interview_id = %s
         ORDER BY qr.question_id ASC;
     """
-    response_data = []
+    response_data = {}
 
     with connection.cursor() as cursor:
         cursor.execute(query, [interview_id])
@@ -264,18 +287,21 @@ def getfeedback(request):
             cursor.execute(speech_emotion_query, [interview_id, question_id])
             speech_emotion_query_result = cursor.fetchone()
 
+            print(speech_emotion_query_result)
+
             question_response = {
-                'question': question,
-                'sentiment_results': sentiment_query_results,
+                'question': 'hehe haha hoho',
+#                'sentiment_results': sentiment_query_results,
             }
 
             if speech_emotion_query_result:
                 question_response['speech_emotion_results'] = {'top_emotion': speech_emotion_query_result[0],
-                                                               'confidence_lvl': speech_emotion_query_result[1]}
+                                                             'confidence_lvl': speech_emotion_query_result[1]}
 
-            response_data.append(question_response)
+
+            response_data.update(question_response)
     
-    return JsonResponse(response_data, safe=False, status=200)
+    return JsonResponse({'r': response_data}, status=200)
 
 
 def speech_emotion_analysis(base64_audio_string):
