@@ -22,6 +22,52 @@ from pydub import AudioSegment
 import requests
 
 
+@csrf_exempt
+def getquestions(request):
+    if request.method != 'GET':
+        return HttpResponse(status=404)
+
+    username = request.GET.get('username')
+    num_questions = request.GET.get('num_questions')
+
+    if not username or not num_questions:
+        return JsonResponse({'message': 'Username and num_questions are required'}, status=400)
+
+    username = str(username) 
+    num_questions = int(num_questions)
+
+    if not user_exists(username):
+        return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
+    
+    query = """
+        SELECT question_id, question
+        FROM default_questions
+        WHERE default_questions.question_id NOT IN (
+            SELECT question_id
+            FROM question_responses
+            WHERE username = %s
+        )
+        LIMIT %s;
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query, [username, num_questions])
+        rows = cursor.fetchall()
+        question_data = [{row[0]: row[1]} for row in rows]
+
+    while True:
+        interview_id = random.randint(100000, 999999)  # Generate a random interview ID
+        query = 'SELECT COUNT(*) FROM question_responses WHERE interview_id = %s'
+        with connection.cursor() as cursor:
+            cursor.execute(query, [interview_id])
+            count = cursor.fetchone()[0]
+            if count == 0:
+                break
+    
+    # return data in JSON 
+    return JsonResponse({'interview_id': interview_id, 'questions':question_data, 'status': 'success' })
+
+
+
 def user_exists(username):
     """
     Check if the user exists in the database.
@@ -97,55 +143,6 @@ def sentimentAPI(input_text):
     for emotion, score in emotion_dict.items():
         out.append((emotion, score))
     return out
-
-
-@csrf_exempt
-def getquestions(request):
-    if request.method != 'GET':
-        return HttpResponse(status=404)
-
-    username = request.GET.get('username')
-    num_questions = request.GET.get('num_questions')
-
-    # make sure username and questions are passed in
-    if not username or not num_questions:
-        return JsonResponse({'message': 'Username and num_questions are required', 'status': 'fail'}, status=400)
-
-    username = str(username) 
-    num_questions = int(num_questions)
-
-    # check to see if user is in the database
-    if not user_exists(username):
-        return JsonResponse({'message': 'User not found', 'status': 'fail'}, status=404)
-    
-    # generate question_id and questions; making sure the questions arent repeated
-    query = """
-        SELECT question_id, question
-        FROM default_questions
-        WHERE default_questions.question_id NOT IN (
-            SELECT question_id
-            FROM question_responses
-            WHERE username = %s
-        )
-        LIMIT %s;
-    """
-    with connection.cursor() as cursor:
-        cursor.execute(query, [username, num_questions])
-        rows = cursor.fetchall()
-        question_data = [{row[0]: row[1]} for row in rows]
-
-    while True:
-        interview_id = random.randint(100000, 999999)  # Generate a random interview ID
-        query = 'SELECT COUNT(*) FROM question_responses WHERE interview_id = %s'
-        with connection.cursor() as cursor:
-            cursor.execute(query, [interview_id])
-            count = cursor.fetchone()[0]
-            if count == 0:
-                break
-    
-    # return data in JSON 
-    return JsonResponse({'interview_id': interview_id, 'questions':question_data, 'status': 'success' })
-
 
 @csrf_exempt
 def postanswers(request):
