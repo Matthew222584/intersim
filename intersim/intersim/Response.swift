@@ -13,4 +13,5 @@ struct Response {
     var questionID: Int
     var textResponse: String?
     var audioResponse: Data?
+    var videoResponse: Data?
 }

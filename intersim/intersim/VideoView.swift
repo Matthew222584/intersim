@@ -13,9 +13,10 @@ struct VideoView: View {
     private var videoRecorder: VideoRecorder = VideoRecorder()
     @State private var isRecording = false
     @State private var isPreviewReady = false
-    var didFinishRecording: ((URL) -> Void)?
+    var speechRecognizer = SpeechRecognizer()
+    var didFinishRecording: ((URL, String) -> Void)?
     
-    init(didFinishRecording: ((URL) -> Void)? = nil) {
+    init(didFinishRecording: ((URL, String) -> Void)? = nil) {
         self.didFinishRecording = didFinishRecording
     }
 
@@ -27,8 +28,10 @@ struct VideoView: View {
             
             Button {
                 if isRecording {
+                    speechRecognizer.stopTranscribing()
                     videoRecorder.stopRecording()
                 } else {
+                    speechRecognizer.startTranscribing()
                     videoRecorder.startRecording()
                 }
                 isRecording.toggle()
@@ -44,10 +47,15 @@ struct VideoView: View {
         }
         .onReceive(videoRecorder.$videoURL) { videoURL in
             if let url = videoURL {
-                print(url)
-                didFinishRecording?(url)
+                didFinishRecording?(url, speechRecognizer.transcript)
             }
         }
+        .onDisappear {
+            videoRecorder.destroyCaptureSession()
+        }
+        .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
+        .navigationTitle("Video Interview")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -78,12 +86,13 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
 
             do {
                 let session = AVCaptureSession()
-                let videoInput = try AVCaptureDeviceInput(device: frontCamera)
-                let audioInput = try AVCaptureDeviceInput(device: audioDevice)
-                
-                session.addInput(videoInput)
-                session.addInput(audioInput)
                 session.addOutput(self.fileOutput)
+                
+                let videoInput = try AVCaptureDeviceInput(device: frontCamera)
+                session.addInput(videoInput)
+                
+                let audioInput = try AVCaptureDeviceInput(device: audioDevice)
+                session.addInput(audioInput)
 
                 self.previewLayer = AVCaptureVideoPreviewLayer(session: session)
                 self.previewLayer?.videoGravity = .resizeAspectFill
@@ -120,7 +129,6 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
                 print("Error recording video: \(error!.localizedDescription)")
                 return
             }
-
             self.videoURL = outputFileURL
             
             PHPhotoLibrary.requestAuthorization { status in
@@ -136,6 +144,12 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
                 }
             }
         }
+    }
+    
+    func destroyCaptureSession() {
+        captureSession?.stopRunning()
+        captureSession = nil
+        previewLayer = nil
     }
 }
 

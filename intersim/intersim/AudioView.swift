@@ -1,31 +1,28 @@
-//
-//  AudioView.swift
-//  intersim
-//
-//  Created by Kyle on 3/21/24.
-//
-
 import SwiftUI
 import AVFoundation
+import Speech
 
 struct AudioView: View {
     @State private var isRecording = false
     @State private var audioRecorder: AVAudioRecorder!
     @State private var audioPlayer: AVAudioPlayer?
     @State private var audioURL: URL?
-    var didFinishRecording: ((URL) -> Void)?
+    var speechRecognizer = SpeechRecognizer()
+    var didFinishRecording: ((URL, String) -> Void)?
 
     var body: some View {
         VStack {
             Button(action: {
                 if isRecording {
                     audioRecorder.stop()
+                    speechRecognizer.stopTranscribing()
+                    
                     if let url = audioURL {
-                        didFinishRecording?(url)
+                        didFinishRecording?(url, speechRecognizer.transcript)
                     }
-                    startPlayback()
                 } else {
                     startRecording()
+                    speechRecognizer.startTranscribing()
                 }
                 isRecording.toggle()
             }) { Text(isRecording ? "Stop Recording" : "Start Recording") }
@@ -33,9 +30,6 @@ struct AudioView: View {
         .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
         .navigationTitle("Audio Interview")
         .navigationBarTitleDisplayMode(.inline)
-        .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        }
     }
 
     func startRecording() {
@@ -54,17 +48,6 @@ struct AudioView: View {
             audioURL = audioFilename
         } catch {
             print("Error recording audio: \(error.localizedDescription)")
-        }
-    }
-
-    // this function is for testing
-    func startPlayback() {
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioURL!)
-            audioPlayer?.play()
-            print("audio is playing")
-        } catch {
-            print("Error playing audio: \(error.localizedDescription)")
         }
     }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 class Interview {
     static let shared = Interview()
     private var questions: [String] = []
@@ -15,8 +14,7 @@ class Interview {
     private var numQuestions = 0
     private var interviewId = 0
     private var username = ""
-    // old 3.145.41.160
-    private let serverUrl = "https://13.58.178.47/"
+    private let serverUrl = "https://18.219.139.85/"
     var feedback: [String] = []
     
     private init() {
@@ -25,7 +23,7 @@ class Interview {
     }
     
     func postResponse(response: Response) {
-        guard let apiUrl = URL(string: "\(serverUrl)postanswers/") else {
+        guard let apiUrl = URL(string: "\(serverUrl)postresponse/") else {
             print("postResponse: Bad URL")
             return
         }
@@ -37,10 +35,12 @@ class Interview {
             "username": response.username,
             "interview_id": response.interviewID ,
             "question_id": response.questionID,
-            "question_answer": response.textResponse ?? "",
+            "question_answer": "this is a test", //response.textResponse ?? ""
             "audio": response.audioResponse?.base64EncodedString() ?? "",
-            "video_file_path": ""
+            "video": response.videoResponse?.base64EncodedString() ?? ""
         ]
+        
+        print(body)
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             print("Failed to serialize JSON data")
@@ -48,12 +48,12 @@ class Interview {
         }
         
         request.httpBody = jsonData
-        print(self.interviewId)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error: \(error)")
             } else if let _ = data, let response = response as? HTTPURLResponse {
+                print(response)
                 print("Response: \(response.statusCode)")
             }
         }.resume()
@@ -61,7 +61,7 @@ class Interview {
     
     private func fetchQuestions() {
         guard var apiUrl = URLComponents(string: "\(serverUrl)getquestions/") else {
-            print("getQuestions: Bad URL")
+            print("fetchQuestions: Bad URL")
             return
         }
         apiUrl.queryItems = [
@@ -133,30 +133,30 @@ class Interview {
                 return
             }
             
-            debugPrint(data)
-            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [[Any]] else {
+            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
                 print("getFeedback: failed JSON deserialization")
                 return
             }
             
-            var feedback: [String] = []
-            var i = 0
-            for item in jsonObj {
-                if i % 5 == 0 {
-                    feedback.append("Question: " + (item[0] as! String))
-                    feedback.append("Response: " + (item[3] as! String))
-                }
-                i += 1
-                
-                feedback.append((item[1] as! String) + ": " + String((item[2] as! Double)))
+            guard let responseData = jsonObj["response_data"] as? [[String: Any]] else {
+                print("Error: Unable to extract response_data from JSON")
+                return
             }
-            
-            self.feedback = feedback
-            print(feedback)
+
+            for item in responseData {
+                if let questionContent = item["question_content"] as? String {
+                    print(questionContent)
+                }
+                if let textResponse = item["text_response"] as? String {
+                    print(textResponse)
+                }
+                if let sentiment_results = item["sentiment_results"] as? [Any] {
+                    print(sentiment_results)
+                }
+            }
         }.resume()
     }
     
-    // Getters and setters
     func getQuestion(index: Int) -> String {
         return questions[index]
     }

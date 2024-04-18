@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F1E5D7C2BD02FAC0059FA74 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1E5D7B2BD02FAC0059FA74 /* SpeechRecognizer.swift */; };
 		1F3F97562BACE4D800AD3405 /* Interview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F97552BACE4D800AD3405 /* Interview.swift */; };
 		1F3F975A2BACF78400AD3405 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F97592BACF78400AD3405 /* FeedbackView.swift */; };
 		1F3F975C2BACFD6300AD3405 /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F975B2BACFD6300AD3405 /* AudioView.swift */; };
@@ -15,7 +16,6 @@
 		EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E122BAB5601000C0E66 /* StartView.swift */; };
 		EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F3E142BACB5BB000C0E66 /* TextView.swift */; };
 		ECC77C382BB7AC0200716697 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC77C372BB7AC0200716697 /* User.swift */; };
-		ECCC2C9D2BC6DF8A00C3726C /* DefaultButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCC2C9C2BC6DF8A00C3726C /* DefaultButtonStyle.swift */; };
 		ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */; };
 		ECE58BA92BAA074400EE5FA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */; };
 		ECE58BAA2BAA074400EE5FA1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECE58BA22BAA074400EE5FA1 /* Preview Assets.xcassets */; };
@@ -24,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F06C0C02BC99D1A00B8E742 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F1E5D7B2BD02FAC0059FA74 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		1F3F97552BACE4D800AD3405 /* Interview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interview.swift; sourceTree = "<group>"; };
 		1F3F97592BACF78400AD3405 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		1F3F975B2BACFD6300AD3405 /* AudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioView.swift; sourceTree = "<group>"; };
@@ -32,7 +34,6 @@
 		EC6F3E122BAB5601000C0E66 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		EC6F3E142BACB5BB000C0E66 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		ECC77C372BB7AC0200716697 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		ECCC2C9C2BC6DF8A00C3726C /* DefaultButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButtonStyle.swift; sourceTree = "<group>"; };
 		ECD72A5C2B7411CB00CED84D /* intersim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = intersim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = swiftUIIntersimApp.swift; sourceTree = "<group>"; };
 		ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,9 +72,14 @@
 		ECE58B9E2BAA074400EE5FA1 /* intersim */ = {
 			isa = PBXGroup;
 			children = (
+				1F06C0C02BC99D1A00B8E742 /* Info.plist */,
 				ECE58BA12BAA074400EE5FA1 /* Preview Content */,
 				ECE58BA02BAA074400EE5FA1 /* Assets.xcassets */,
 				ECE58B9F2BAA074400EE5FA1 /* swiftUIIntersimApp.swift */,
+				1F1E5D7B2BD02FAC0059FA74 /* SpeechRecognizer.swift */,
+				1F3F97552BACE4D800AD3405 /* Interview.swift */,
+				ECE58BA42BAA074400EE5FA1 /* Response.swift */,
+				ECC77C372BB7AC0200716697 /* User.swift */,
 				ECE58BA52BAA074400EE5FA1 /* MainView.swift */,
 				EC6F3E122BAB5601000C0E66 /* StartView.swift */,
 				1F3F975D2BAD012900AD3405 /* QuestionView.swift */,
@@ -81,10 +87,6 @@
 				1FC3DBFA2BBB21F50032C3C0 /* VideoView.swift */,
 				1F3F975B2BACFD6300AD3405 /* AudioView.swift */,
 				1F3F97592BACF78400AD3405 /* FeedbackView.swift */,
-				1F3F97552BACE4D800AD3405 /* Interview.swift */,
-				ECE58BA42BAA074400EE5FA1 /* Response.swift */,
-				ECC77C372BB7AC0200716697 /* User.swift */,
-				ECCC2C9C2BC6DF8A00C3726C /* DefaultButtonStyle.swift */,
 			);
 			path = intersim;
 			sourceTree = "<group>";
@@ -168,11 +170,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F3F975C2BACFD6300AD3405 /* AudioView.swift in Sources */,
-				ECCC2C9D2BC6DF8A00C3726C /* DefaultButtonStyle.swift in Sources */,
 				ECE58BA82BAA074400EE5FA1 /* swiftUIIntersimApp.swift in Sources */,
 				EC6F3E152BACB5BB000C0E66 /* TextView.swift in Sources */,
 				ECE58BAD2BAA074400EE5FA1 /* MainView.swift in Sources */,
 				1F3F975E2BAD012900AD3405 /* QuestionView.swift in Sources */,
+				1F1E5D7C2BD02FAC0059FA74 /* SpeechRecognizer.swift in Sources */,
 				1F3F97562BACE4D800AD3405 /* Interview.swift in Sources */,
 				ECE58BAC2BAA074400EE5FA1 /* Response.swift in Sources */,
 				EC6F3E132BAB5601000C0E66 /* StartView.swift in Sources */,
@@ -312,12 +314,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"intersim/Preview Content\"";
-				DEVELOPMENT_TEAM = 8YDK9GMM7X;
+				DEVELOPMENT_TEAM = UC2GPNLS8S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = intersim/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to record video.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "to record audio.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = test;
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "speech to text";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -329,7 +333,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.siebk.swiftUIIntersim;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.siebk2.swiftUIIntersim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -345,12 +349,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"intersim/Preview Content\"";
-				DEVELOPMENT_TEAM = 8YDK9GMM7X;
+				DEVELOPMENT_TEAM = UC2GPNLS8S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = intersim/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "to record video.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "to record audio.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = test;
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "speech to text";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -362,7 +368,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.siebk.swiftUIIntersim;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.siebk2.swiftUIIntersim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

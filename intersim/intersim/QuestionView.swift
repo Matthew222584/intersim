@@ -1,10 +1,3 @@
-//
-//  QuestionView.swift
-//  intersim
-//
-//  Created by Kyle on 3/21/24.
-//
-
 import SwiftUI
 
 struct QuestionView: View {
@@ -20,15 +13,14 @@ struct QuestionView: View {
                                 interviewID: interviewInstance.getInterviewId(),
                                 questionID: interviewInstance.getQuestionId(index: self.questionIndex))
         
-        if showViews[0] {
-            response.textResponse = textResponse
-        } else if showViews[1] {
+        response.textResponse = textResponse
+        if showViews[1], let audioURL = audioURL {
             do {
-                response.audioResponse = try Data(contentsOf: audioURL!)
+                response.audioResponse = try Data(contentsOf: audioURL)
             } catch {
                 print("error getting audio data")
             }
-        } else {
+        } else if showViews[2] {
             print("TODO: post video")
         }
         
@@ -38,8 +30,7 @@ struct QuestionView: View {
     private func updateQuestion() {
         if questionIndex + 1 == interviewInstance.getQuestionsCount() {
             presentFeedbackView = true
-        }
-        else {
+        } else {
             questionIndex += 1
             textResponse = "Type your response here."
         }
@@ -49,20 +40,26 @@ struct QuestionView: View {
         if showViews[0] {
             return AnyView(TextView(textResponse: $textResponse))
         } else if showViews[1] {
-            return AnyView(AudioView(didFinishRecording: { url in
+            return AnyView(AudioView(didFinishRecording: { url, text in
+                print(url)
+                print(text)
                 self.audioURL = url
+                self.textResponse = text
             }))
         } else {
-            return AnyView(VideoView())
+            return AnyView(VideoView(didFinishRecording: { url, text in
+                print(url)
+                print(text)
+            }))
         }
     }
     
     @ViewBuilder
     func SubmitButton() -> some View {
-        Button {
+        Button(action: {
             postResponse()
             updateQuestion()
-        } label: {
+        }) {
             Text("Submit")
             Image(systemName: "paperplane")
         }
@@ -70,11 +67,8 @@ struct QuestionView: View {
     
     var body: some View {
         VStack {
-            Spacer()
             Text(interviewInstance.getQuestion(index: self.questionIndex))
-            Spacer()
             presentView()
-            Spacer()
         }
         .toolbar {
             ToolbarItem(placement:.navigationBarTrailing) {
@@ -84,5 +78,6 @@ struct QuestionView: View {
         .fullScreenCover(isPresented: $presentFeedbackView) {
             FeedbackView()
         }
+        .id(questionIndex)
     }
 }

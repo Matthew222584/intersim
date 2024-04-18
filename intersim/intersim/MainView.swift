@@ -20,10 +20,9 @@ struct MainView: View {
             Text("Continue as guest")
         }
         .navigationTitle("intersim")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $initialized) {
             StartView(isPresented: $initialized)
         }
-        .buttonStyle(DefaultButtonStyle())
     }
 }
