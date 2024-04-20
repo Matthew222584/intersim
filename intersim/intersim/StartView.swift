@@ -11,9 +11,7 @@ struct StartView: View {
     @Binding var isPresented: Bool
     @State private var isPresenting = false
     @State private var showQuestion = false
-    
-    // text, audio, video
-    @State private var showViews = [false, false, false]
+    @State private var showViews = [false, false, false] // text, audio, video
     
     @ViewBuilder
     func TextButton() -> some View {
@@ -50,23 +48,19 @@ struct StartView: View {
     
     var body: some View {
         VStack {
-            Spacer()
-            Text("Choose an interview type.")
+            Text("Choose an interview type")
                 .padding(.top, 30.0)
-                .font(.system(size: 40))
-            Spacer()
             VStack {
                 TextButton()
                 AudioButton()
                 VideoButton()
             }
-            Spacer()
             .navigationTitle("Start")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(isPresented: $showQuestion) {
                 QuestionView(showViews: showViews)
             }
+            .buttonStyle(DefaultButtonStyle())
         }
-        .buttonStyle(DefaultButtonStyle())
     }
 }

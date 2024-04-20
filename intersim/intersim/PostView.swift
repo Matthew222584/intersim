@@ -19,7 +19,7 @@ struct PostView: View {
         Button {
             ResponseStore.shared.postResponse(
                 Response(
-                    questionText: questionText,
+                    questionID: questionText,
                     textResponse: textResponse,
                     audioResponse: audioResponse)
                 ) {

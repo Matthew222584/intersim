@@ -13,30 +13,42 @@ struct VideoView: View {
     private var videoRecorder: VideoRecorder = VideoRecorder()
     @State private var isRecording = false
     @State private var isPreviewReady = false
-    var didFinishRecording: ((URL) -> Void)?
+    var speechRecognizer = SpeechRecognizer()
+    var didFinishRecording: ((URL, String) -> Void)?
     
-    init(didFinishRecording: ((URL) -> Void)? = nil) {
+    init(didFinishRecording: ((URL, String) -> Void)? = nil) {
         self.didFinishRecording = didFinishRecording
     }
-
+    
     var body: some View {
         VStack {
             if isPreviewReady, let previewLayer = videoRecorder.previewLayer {
                 PreviewView(previewLayer: previewLayer)
+//                    .overlay(
+//                        RoundedRectangle(cornerRadius: 10)
+//                            .stroke(lineWidth: 4)
+//                            .foregroundColor(.blue)
+//                    )
             }
-            
             Button {
                 if isRecording {
+                    speechRecognizer.stopTranscribing()
                     videoRecorder.stopRecording()
                 } else {
+                    speechRecognizer.startTranscribing()
                     videoRecorder.startRecording()
                 }
                 isRecording.toggle()
             } label: {
-                Text(isRecording ? "Stop recording" : "Start recording")
+                Image(systemName: isRecording ? "stop.circle" : "record.circle")
+                    .font(.system(size: 50))
+                    .padding()
             }
             .disabled(!isPreviewReady)
         }
+        .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
+        .navigationTitle("Video Interview")
+        .navigationBarTitleDisplayMode(.inline)
         .onReceive(videoRecorder.$isSetupFinished) { isSetupFinished in
             if isSetupFinished {
                 isPreviewReady = true
@@ -44,8 +56,7 @@ struct VideoView: View {
         }
         .onReceive(videoRecorder.$videoURL) { videoURL in
             if let url = videoURL {
-                print(url)
-                didFinishRecording?(url)
+                didFinishRecording?(url, speechRecognizer.transcript)
             }
         }
     }
@@ -78,12 +89,13 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
 
             do {
                 let session = AVCaptureSession()
-                let videoInput = try AVCaptureDeviceInput(device: frontCamera)
-                let audioInput = try AVCaptureDeviceInput(device: audioDevice)
-                
-                session.addInput(videoInput)
-                session.addInput(audioInput)
                 session.addOutput(self.fileOutput)
+                
+                let videoInput = try AVCaptureDeviceInput(device: frontCamera)
+                session.addInput(videoInput)
+                
+                let audioInput = try AVCaptureDeviceInput(device: audioDevice)
+                session.addInput(audioInput)
 
                 self.previewLayer = AVCaptureVideoPreviewLayer(session: session)
                 self.previewLayer?.videoGravity = .resizeAspectFill
@@ -120,7 +132,6 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
                 print("Error recording video: \(error!.localizedDescription)")
                 return
             }
-
             self.videoURL = outputFileURL
             
             PHPhotoLibrary.requestAuthorization { status in
@@ -137,6 +148,12 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
             }
         }
     }
+    
+    func destroyCaptureSession() {
+        captureSession?.stopRunning()
+        captureSession = nil
+        previewLayer = nil
+    }
 }
 
 struct PreviewView: UIViewRepresentable {
@@ -151,9 +168,15 @@ struct PreviewView: UIViewRepresentable {
         
         let view = UIView()
         view.frame.size = CGSize(width: previewWidth, height: previewHeight)
-        previewLayer.frame = view.bounds
+        previewLayer.frame = view.bounds.insetBy(dx: 4, dy: 4)
+        previewLayer.videoGravity = .resize
         previewLayer.position = CGPoint(x: centerX, y: centerY)
         view.layer.addSublayer(previewLayer)
+        //UI changes
+        view.layer.borderWidth = 4
+        view.layer.borderColor = UIColor.blue.cgColor
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }
     

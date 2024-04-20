@@ -14,7 +14,6 @@ struct TextView: View {
     var body: some View {
         VStack {
             TextEditor(text: $textResponse)
-                .frame(height: UIScreen.main.bounds.height/2)
         }
         .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
         .navigationTitle("Text Interview")
