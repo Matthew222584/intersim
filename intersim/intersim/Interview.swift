@@ -7,6 +7,17 @@
 
 import Foundation
 
+struct Emotion {
+    var Name:String
+    var Percentage:Double
+}
+
+struct FeedbackUnit {
+    var Question:String
+    var Response:String
+    var Emotions:[Emotion]
+}
+
 class Interview {
     static let shared = Interview()
     private var questions: [String] = []
@@ -15,7 +26,7 @@ class Interview {
     private var interviewId = 0
     private var username = ""
     private let serverUrl = "https://18.219.139.85/"
-    var feedback: [String] = []
+    var feedback: [FeedbackUnit] = []
     
     private init() {
         self.username = User.shared.getUsername()
@@ -122,6 +133,60 @@ class Interview {
         request.httpMethod = "GET"
         
         print(request)
+        
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("getFeedback: NETWORKING ERROR")
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("getFeedback: HTTP STATUS: \(httpStatus.statusCode)")
+                return
+            }
+            
+            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                print("getFeedback: failed JSON deserialization")
+                return
+            }
+            
+            guard let responseData = jsonObj["response_data"] as? [[String: Any]] else {
+                print("Error: Unable to extract response_data from JSON")
+                return
+            }
+            
+            var feedback: [FeedbackUnit] = []
+            var emotions: [Emotion] = []
+            var unit = FeedbackUnit(Question: "",Response: "", Emotions: [])
+            var tempEmotion = Emotion(Name: "", Percentage: 0)
+            var i = 0
+            
+            for item in responseData {
+                if let questionContent = item["question_content"] as? String {
+                    unit.Question = questionContent
+                    print(questionContent)
+                }
+                if let textResponse = item["text_response"] as? String {
+                    unit.Response = textResponse
+                    print(textResponse)
+                }
+                if let sentimentResults = item["sentiment_results"] as? [[Any]] {
+                    for result in sentimentResults {
+                        if let emotion = result.first as? String, let value = result.last as? Double {
+                            emotions.append(Emotion(Name: emotion, Percentage: value * 100))
+                            print("Emotion: \(emotion), Value: \(value)")
+                        }
+                    }
+                }
+                unit.Emotions = emotions
+                feedback.append(unit)
+                emotions = []
+            }
+            
+            self.feedback = feedback
+            print(feedback)
+        }.resume()
+        
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
