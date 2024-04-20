@@ -20,7 +20,7 @@ struct MainView: View {
             Text("Continue as guest")
         }
         .navigationTitle("intersim")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
         .navigationDestination(isPresented: $initialized) {
             StartView(isPresented: $initialized)
         }

@@ -24,8 +24,12 @@ struct VideoView: View {
         VStack {
             if isPreviewReady, let previewLayer = videoRecorder.previewLayer {
                 PreviewView(previewLayer: previewLayer)
+//                    .overlay(
+//                        RoundedRectangle(cornerRadius: 10)
+//                            .stroke(lineWidth: 4)
+//                            .foregroundColor(.blue)
+//                    )
             }
-            
             Button {
                 if isRecording {
                     speechRecognizer.stopTranscribing()
@@ -36,9 +40,10 @@ struct VideoView: View {
                 }
                 isRecording.toggle()
             } label: {
-                isRecording ? Image(systemName: "stop.circle") : Image(systemName: "record.circle")
+                Image(systemName: isRecording ? "stop.circle" : "record.circle")
+                    .font(.system(size: 50))
+                    .padding()
             }
-            .imageScale(.medium)
             .disabled(!isPreviewReady)
         }
         .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
@@ -163,9 +168,15 @@ struct PreviewView: UIViewRepresentable {
         
         let view = UIView()
         view.frame.size = CGSize(width: previewWidth, height: previewHeight)
-        previewLayer.frame = view.bounds
+        previewLayer.frame = view.bounds.insetBy(dx: 4, dy: 4)
+        previewLayer.videoGravity = .resize
         previewLayer.position = CGPoint(x: centerX, y: centerY)
         view.layer.addSublayer(previewLayer)
+        //UI changes
+        view.layer.borderWidth = 4
+        view.layer.borderColor = UIColor.blue.cgColor
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }
     

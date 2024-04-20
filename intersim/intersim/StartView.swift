@@ -50,16 +50,17 @@ struct StartView: View {
         VStack {
             Text("Choose an interview type")
                 .padding(.top, 30.0)
-            HStack {
+            VStack {
                 TextButton()
                 AudioButton()
                 VideoButton()
             }
             .navigationTitle("Start")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .navigationDestination(isPresented: $showQuestion) {
                 QuestionView(showViews: showViews)
             }
+            .buttonStyle(DefaultButtonStyle())
         }
     }
 }
