@@ -173,7 +173,8 @@ def postanswers(request):
         print('speech emoiton api call')
         add_to_speech_emotion_table(interview_id, question_id, speechEmotionResults["emotion"], speechEmotionResults["confidence"])
     # elif (video): do later
-
+        #facialResults = facial_analysis(video_file_path)
+ 
     # TODO: run this code on question_answer, which should definitely be a filled out text string by this point
     sentimentAnalysis = (sentimentAPI(question_answer))
     for emotion, value in sentimentAnalysis:
@@ -313,3 +314,17 @@ def speech_emotion_analysis(base64_audio_string):
         return response.json()
     else:
         print('Error running speech emotion analysis with response code ', response.status_code)
+
+"""
+def facial_anaylsis(base64_video_string) :
+   url = 'https://3.15.187.51/getfacial/'
+   data = {'video_file_path': base64_video_string}
+   response = requests.post(url, json=data, verify=False)
+
+   if response.status_code == 200:
+        return response.json()
+   else:
+        print('Error running facial analysis with response code ', response.status_code)
+"""
+
+   
