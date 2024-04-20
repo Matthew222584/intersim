@@ -19,7 +19,7 @@ struct VideoView: View {
     init(didFinishRecording: ((URL, String) -> Void)? = nil) {
         self.didFinishRecording = didFinishRecording
     }
-
+    
     var body: some View {
         VStack {
             if isPreviewReady, let previewLayer = videoRecorder.previewLayer {
@@ -36,10 +36,14 @@ struct VideoView: View {
                 }
                 isRecording.toggle()
             } label: {
-                Text(isRecording ? "Stop recording" : "Start recording")
+                isRecording ? Image(systemName: "stop.circle") : Image(systemName: "record.circle")
             }
+            .imageScale(.medium)
             .disabled(!isPreviewReady)
         }
+        .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
+        .navigationTitle("Video Interview")
+        .navigationBarTitleDisplayMode(.inline)
         .onReceive(videoRecorder.$isSetupFinished) { isSetupFinished in
             if isSetupFinished {
                 isPreviewReady = true
@@ -50,12 +54,6 @@ struct VideoView: View {
                 didFinishRecording?(url, speechRecognizer.transcript)
             }
         }
-        .onDisappear {
-            videoRecorder.destroyCaptureSession()
-        }
-        .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
-        .navigationTitle("Video Interview")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -24,5 +24,6 @@ struct MainView: View {
         .navigationDestination(isPresented: $initialized) {
             StartView(isPresented: $initialized)
         }
+        .buttonStyle(DefaultButtonStyle())
     }
 }

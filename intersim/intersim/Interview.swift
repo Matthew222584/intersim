@@ -167,7 +167,7 @@ class Interview {
     }
     
     func getQuestion(index: Int) -> String {
-        return questions[index]
+        return "Here is a temporary question for testing only."//questions[index]
     }
     
     func getQuestionsCount() -> Int {

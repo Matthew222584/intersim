@@ -12,7 +12,7 @@ struct AudioView: View {
 
     var body: some View {
         VStack {
-            Button(action: {
+            Button {
                 if isRecording {
                     audioRecorder.stop()
                     speechRecognizer.stopTranscribing()
@@ -25,7 +25,10 @@ struct AudioView: View {
                     speechRecognizer.startTranscribing()
                 }
                 isRecording.toggle()
-            }) { Text(isRecording ? "Stop Recording" : "Start Recording") }
+            } label: {
+                isRecording ? Image(systemName: "stop.circle") : Image(systemName: "record.circle")
+            }
+            .imageScale(.medium)
         }
         .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
         .navigationTitle("Audio Interview")
