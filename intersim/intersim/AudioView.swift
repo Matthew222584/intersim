@@ -26,9 +26,11 @@ struct AudioView: View {
                 }
                 isRecording.toggle()
             } label: {
-                isRecording ? Image(systemName: "stop.circle") : Image(systemName: "record.circle")
+                Image(systemName: isRecording ? "stop.circle" : "record.circle")
+                    .font(.system(size: 50))
+                    .padding()
             }
-            .imageScale(.medium)
+            Spacer()
         }
         .padding(EdgeInsets(top:10, leading:18, bottom:0, trailing:4))
         .navigationTitle("Audio Interview")

@@ -24,11 +24,12 @@ struct VideoView: View {
         VStack {
             if isPreviewReady, let previewLayer = videoRecorder.previewLayer {
                 PreviewView(previewLayer: previewLayer)
-//                    .overlay(
-//                        RoundedRectangle(cornerRadius: 10)
-//                            .stroke(lineWidth: 4)
-//                            .foregroundColor(.blue)
-//                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(lineWidth: 4)
+                            .foregroundColor(.blue)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius:10))
             }
             Button {
                 if isRecording {
@@ -158,27 +159,30 @@ class VideoRecorder: NSObject, AVCaptureFileOutputRecordingDelegate, ObservableO
 
 struct PreviewView: UIViewRepresentable {
     let previewLayer: AVCaptureVideoPreviewLayer
+    let borderWidth: CGFloat = 4
     
     func makeUIView(context: Context) -> UIView {
         let screenBounds = UIScreen.main.bounds
-        let previewWidth = screenBounds.width * 0.5
-        let previewHeight = screenBounds.height * 0.5
-        let centerX = screenBounds.width / 2
-        let centerY = screenBounds.height / 2
+        let previewWidth = screenBounds.width
+        let previewHeight = screenBounds.height
         
         let view = UIView()
         view.frame.size = CGSize(width: previewWidth, height: previewHeight)
-        previewLayer.frame = view.bounds.insetBy(dx: 4, dy: 4)
-        previewLayer.videoGravity = .resize
-        previewLayer.position = CGPoint(x: centerX, y: centerY)
+        previewLayer.frame = view.bounds.insetBy(dx: borderWidth, dy: borderWidth)
+        previewLayer.videoGravity = .resizeAspectFill
+        //previewLayer.position = CGPoint(x: centerX, y: centerY)
         view.layer.addSublayer(previewLayer)
-        //UI changes
-        view.layer.borderWidth = 4
+        
+        view.layer.borderWidth = borderWidth
         view.layer.borderColor = UIColor.blue.cgColor
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         return view
     }
     
-    func updateUIView(_ uiView: UIView, context: Context) {}
+    func updateUIView(_ uiView: UIView, context: Context) {
+//        if let previewLayer = uiView.layer.sublayers?.first(where: { $0 is AVCaptureVideoPreviewLayer }) as? AVCaptureVideoPreviewLayer {
+//                    previewLayer.frame = uiView.bounds.insetBy(dx: borderWidth, dy: borderWidth)
+//                }
+    }
 }

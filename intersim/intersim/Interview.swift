@@ -144,8 +144,6 @@ class Interview {
             }
 
             for item in responseData {
-                print()
-                
                 if let questionContent = item["question_content"] as? String {
                     print(questionContent)
                 }
@@ -167,7 +165,7 @@ class Interview {
     }
     
     func getQuestion(index: Int) -> String {
-        return "Here is a temporary question for testing only."//questions[index]
+        return questions[index]
     }
     
     func getQuestionsCount() -> Int {

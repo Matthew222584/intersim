@@ -75,6 +75,8 @@ struct QuestionView: View {
             Text(interviewInstance.getQuestion(index: self.questionIndex))
             Spacer()
             presentView()
+                .aspectRatio(1, contentMode: .fit)
+                .frame(maxWidth: 800, maxHeight: 1000)
         }
         .toolbar {
             ToolbarItem(placement:.navigationBarTrailing) {
