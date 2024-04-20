@@ -35,7 +35,7 @@ class Interview {
             "username": response.username,
             "interview_id": response.interviewID ,
             "question_id": response.questionID,
-            "question_answer": "this is a test", //response.textResponse ?? ""
+            "question_answer": response.textResponse ?? "",
             "audio": response.audioResponse?.base64EncodedString() ?? "",
             "video": response.videoResponse?.base64EncodedString() ?? ""
         ]
@@ -144,14 +144,23 @@ class Interview {
             }
 
             for item in responseData {
+                print()
+                
                 if let questionContent = item["question_content"] as? String {
                     print(questionContent)
                 }
                 if let textResponse = item["text_response"] as? String {
                     print(textResponse)
                 }
-                if let sentiment_results = item["sentiment_results"] as? [Any] {
-                    print(sentiment_results)
+                if let sentimentResults = item["sentiment_results"] as? [[Any]] {
+                    for result in sentimentResults {
+                        if let emotion = result.first as? String, let value = result.last as? Double {
+                            print("Emotion: \(emotion), Value: \(value)")
+                        }
+                    }
+                }
+                if let toneResults = item["speech_emotion_results"] as? [[Any]] {
+                    print(toneResults)
                 }
             }
         }.resume()

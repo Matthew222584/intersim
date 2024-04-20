@@ -7,6 +7,7 @@ struct QuestionView: View {
     @State private var presentFeedbackView = false
     @State private var textResponse = "Type your response here."
     @State private var audioURL: URL? = nil
+    @State private var videoURL: URL? = nil
     
     private func postResponse() {
         var response = Response(username: User.shared.getUsername(),
@@ -14,14 +15,19 @@ struct QuestionView: View {
                                 questionID: interviewInstance.getQuestionId(index: self.questionIndex))
         
         response.textResponse = textResponse
+        
         if showViews[1], let audioURL = audioURL {
             do {
                 response.audioResponse = try Data(contentsOf: audioURL)
             } catch {
                 print("error getting audio data")
             }
-        } else if showViews[2] {
-            print("TODO: post video")
+        } else if showViews[2], let videoUrl = videoURL {
+            do {
+                response.videoResponse = try Data(contentsOf: videoUrl)
+            } catch {
+                print("error getting video data")
+            }
         }
         
         interviewInstance.postResponse(response: response)
@@ -41,15 +47,13 @@ struct QuestionView: View {
             return AnyView(TextView(textResponse: $textResponse))
         } else if showViews[1] {
             return AnyView(AudioView(didFinishRecording: { url, text in
-                print(url)
-                print(text)
                 self.audioURL = url
                 self.textResponse = text
             }))
         } else {
             return AnyView(VideoView(didFinishRecording: { url, text in
-                print(url)
-                print(text)
+                self.videoURL = url
+                self.textResponse = text
             }))
         }
     }
