@@ -18,7 +18,7 @@ struct FeedbackView: View {
     @State private var cancellable: AnyCancellable?
     
     func updateItems() {
-        var itemCount = self.items.count
+        let itemCount = self.items.count
         self.items = interviewInstance.feedback
         timeoutCounter += 1
         if self.items.count > itemCount {
@@ -35,68 +35,102 @@ struct FeedbackView: View {
     func ItemsView(for item:FeedbackUnit) -> some View {
         HStack {
             VStack {
-                Text(item.Question)
+                Text("Question: " + item.Question)
                     .fontWeight(.bold)
                     .font(.title)
                     .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                Text(item.Response)
+                    .frame(maxWidth: .infinity, alignment: .top)
+                Text("Response: " + item.Response)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.black)
             }
-            .frame(maxHeight: .infinity)
+            .frame(maxWidth: 300, maxHeight: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.blue, lineWidth: 10)
                     .fill(Color.white)
             )
-            Chart(item.Emotions, id: \.Name) { emotion in
-                BarMark(
-                    x: .value("Emotion", emotion.Name),
-                    y: .value("Percentage", emotion.Percentage)
-                )
+            HStack {
+                if let sentiment = item.Sentiment {
+                    VStack {
+                        Text("Sentiment Top 3")
+                            .font(.title)
+                            .foregroundColor(.blue)
+                            .padding(.bottom, 5)
+                        ForEach(sentiment.sorted().prefix(3)) { emotion in
+                            HStack {
+                                Text(emotion.Name)
+                                    .bold()
+                                Spacer()
+                                Text(String(format: "%.1f%%", emotion.Percentage))
+                            }
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(LinearGradient(gradient: Gradient(colors: [.blue, .blue.opacity(0.5)]), startPoint: .leading, endPoint: .trailing))
+                            .cornerRadius(10)
+                        }
+                    }
+                }
+                if let tone = item.Tone {
+                    VStack {
+                        Text("Tone Top 3")
+                            .font(.title)
+                            .foregroundColor(.blue)
+                            .padding(.bottom, 5)
+                        ForEach(tone) { emotion in
+                            HStack {
+                                Text(emotion.Name)
+                                    .bold()
+                                Spacer()
+                                Text(String(format: "%.1f%%", emotion.Percentage))
+                            }
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(LinearGradient(gradient: Gradient(colors: [.blue, .blue.opacity(0.5)]), startPoint: .leading, endPoint: .trailing))
+                            .cornerRadius(10)
+                        }
+                    }
+                }
             }
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.black, lineWidth: 1)
-                    .fill(Color.black)
-            )
-            .padding(.horizontal)
+            .padding()
         }
         .padding()
+        .frame(height: 400)
     }
     
     var body: some View {
         NavigationStack {
-            VStack {
-                ForEach(items, id: \.Question) { item in
-                        ItemsView(for: item)
+            ScrollView {
+                VStack {
+                    ForEach(items, id: \.Question) { item in
+                            ItemsView(for: item)
+                    }
+                    Spacer()
                 }
-                Spacer()
-                Button {
-                    initialized.toggle()
-                } label: {
-                    Text("Start another interview")
-                    Image(systemName: "arrowshape.backward.fill")
+                .navigationTitle("feedback")
+                .navigationDestination(isPresented: $initialized) {
+                    MainView()
+                }
+                .onAppear() {
+                    interviewInstance.fetchFeedback()
+                    updateItems()
+                    cancellable = timer
+                        .sink { _ in
+                            interviewInstance.fetchFeedback()
+                            updateItems()
+                        }
+                }
+                .onDisappear {
+                    cancellable?.cancel()  // Cancel the timer when the view disappears
                 }
             }
-            .navigationTitle("feedback")
-            .navigationDestination(isPresented: $initialized) {
-                MainView()
+            Button {
+                initialized.toggle()
+            } label: {
+                Text("Start another interview")
+                Image(systemName: "arrowshape.backward.fill")
             }
             .buttonStyle(DefaultButtonStyle())
-            .onAppear() {
-                interviewInstance.fetchFeedback()
-                updateItems()
-                cancellable = timer
-                    .sink { _ in
-                        interviewInstance.fetchFeedback()
-                        updateItems()
-                    }
-            }
-            .onDisappear {
-                cancellable?.cancel()  // Cancel the timer when the view disappears
-            }
         }
     }
 }

@@ -7,15 +7,22 @@
 
 import Foundation
 
-struct Emotion {
+struct Emotion: Identifiable, Comparable {
+    var id: String { Name }
     var Name:String
     var Percentage:Double
+    
+    static func <(lhs: Emotion, rhs: Emotion) -> Bool {
+        return lhs.Percentage > rhs.Percentage // Sort in descending order by percentage
+    }
 }
 
 struct FeedbackUnit {
     var Question:String
     var Response:String
-    var Emotions:[Emotion]
+    var Sentiment:[Emotion]?
+    var Tone:[Emotion]?
+    var Facial:[Emotion]?
 }
 
 class Interview {
@@ -157,9 +164,7 @@ class Interview {
             
             var feedback: [FeedbackUnit] = []
             var emotions: [Emotion] = []
-            var unit = FeedbackUnit(Question: "",Response: "", Emotions: [])
-            var tempEmotion = Emotion(Name: "", Percentage: 0)
-            var i = 0
+            var unit = FeedbackUnit(Question: "",Response: "")
             
             for item in responseData {
                 if let questionContent = item["question_content"] as? String {
@@ -168,17 +173,45 @@ class Interview {
                 if let textResponse = item["text_response"] as? String {
                     unit.Response = textResponse
                 }
-                if let sentimentResults = item["sentiment_results"] as? [[Any]] {
+                
+                // sentiment
+                if let sentimentResults = item["sentiment"] as? [[Any]] {
                     for result in sentimentResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
                             emotions.append(Emotion(Name: emotion, Percentage: value * 100))
                             print("Emotion: \(emotion), Value: \(value)")
                         }
                     }
+                    unit.Sentiment = emotions.sorted().prefix(3).map { $0 }
+                    feedback.append(unit)
+                    emotions = []
                 }
-                unit.Emotions = emotions
-                feedback.append(unit)
-                emotions = []
+                
+                // tone
+                if let toneResults = item["speech_emotion"] as? [[Any]] {
+                    for result in toneResults {
+                        if let emotion = result.first as? String, let value = result.last as? Double {
+                            emotions.append(Emotion(Name: emotion, Percentage: value * 100))
+                            print("Emotion: \(emotion), Value: \(value)")
+                        }
+                    }
+                    unit.Tone = emotions.sorted().prefix(3).map { $0 }
+                    feedback.append(unit)
+                    emotions = []
+                }
+                
+//                // facial
+//                if let facialResults = item["facial_emotion"] as? [[Any]] {
+//                    for result in facialResults {
+//                        if let emotion = result.first as? String, let value = result.last as? Double {
+//                            emotions.append(Emotion(Name: emotion, Percentage: value * 100))
+//                            print("Emotion: \(emotion), Value: \(value)")
+//                        }
+//                    }
+//                    unit.Tone = emotions
+//                    feedback.append(unit)
+//                    emotions = []
+//                }
             }
             
             self.feedback = feedback
