@@ -25,7 +25,7 @@ class Interview {
     private var numQuestions = 0
     private var interviewId = 0
     private var username = ""
-    private let serverUrl = "https://18.219.139.85/"
+    private let serverUrl = "https://18.221.19.88/"
     var feedback: [FeedbackUnit] = []
     
     private init() {
@@ -164,11 +164,9 @@ class Interview {
             for item in responseData {
                 if let questionContent = item["question_content"] as? String {
                     unit.Question = questionContent
-                    //print(questionContent)
                 }
                 if let textResponse = item["text_response"] as? String {
                     unit.Response = textResponse
-                    //print(textResponse)
                 }
                 if let sentimentResults = item["sentiment_results"] as? [[Any]] {
                     for result in sentimentResults {
@@ -187,46 +185,47 @@ class Interview {
             //print(feedback)
         }.resume()
         
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print("getFeedback: NETWORKING ERROR")
-                return
-            }
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                print("getFeedback: HTTP STATUS: \(httpStatus.statusCode)")
-                return
-            }
-            
-            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                print("getFeedback: failed JSON deserialization")
-                return
-            }
-            
-            guard let responseData = jsonObj["response_data"] as? [[String: Any]] else {
-                print("Error: Unable to extract response_data from JSON")
-                return
-            }
-
-            for item in responseData {
-                if let questionContent = item["question_content"] as? String {
-                    //print(questionContent)
-                }
-                if let textResponse = item["text_response"] as? String {
-                    //print(textResponse)
-                }
-                if let sentimentResults = item["sentiment_results"] as? [[Any]] {
-                    for result in sentimentResults {
-                        if let emotion = result.first as? String, let value = result.last as? Double {
-                            print("Emotion: \(emotion), Value: \(value)")
-                        }
-                    }
-                }
-                if let toneResults = item["speech_emotion_results"] as? [[Any]] {
-                    //print(toneResults)
-                }
-            }
-        }.resume()
+        // DEPRECATED, do not uncomment as the above function
+        // is the uppdated version. Temporarily leaving this here for ref
+//        URLSession.shared.dataTask(with: request) { data, response, error in
+//            guard let data = data, error == nil else {
+//                print("getFeedback: NETWORKING ERROR")
+//                return
+//            }
+//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+//                print("getFeedback: HTTP STATUS: \(httpStatus.statusCode)")
+//                return
+//            }
+//            
+//            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+//                print("getFeedback: failed JSON deserialization")
+//                return
+//            }
+//            
+//            guard let responseData = jsonObj["response_data"] as? [[String: Any]] else {
+//                print("Error: Unable to extract response_data from JSON")
+//                return
+//            }
+//
+//            for item in responseData {
+//                if let questionContent = item["question_content"] as? String {
+//                    //print(questionContent)
+//                }
+//                if let textResponse = item["text_response"] as? String {
+//                    //print(textResponse)
+//                }
+//                if let sentimentResults = item["sentiment_results"] as? [[Any]] {
+//                    for result in sentimentResults {
+//                        if let emotion = result.first as? String, let value = result.last as? Double {
+//                            print("Emotion: \(emotion), Value: \(value)")
+//                        }
+//                    }
+//                }
+//                if let toneResults = item["speech_emotion_results"] as? [[Any]] {
+//                    //print(toneResults)
+//                }
+//            }
+//        }.resume()
     }
     
     func getQuestion(index: Int) -> String {

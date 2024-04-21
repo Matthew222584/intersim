@@ -80,24 +80,23 @@ struct FeedbackView: View {
                     Image(systemName: "arrowshape.backward.fill")
                 }
             }
-//            .frame(maxWidth: )
             .navigationTitle("feedback")
             .navigationDestination(isPresented: $initialized) {
                 MainView()
             }
             .buttonStyle(DefaultButtonStyle())
-        }
-        .onAppear() {
-            interviewInstance.fetchFeedback()
-            updateItems()
-            cancellable = timer
-                .sink { _ in
-                    interviewInstance.fetchFeedback()
-                    updateItems()
-                }
-        }
-        .onDisappear {
-            cancellable?.cancel()  // Cancel the timer when the view disappears
+            .onAppear() {
+                interviewInstance.fetchFeedback()
+                updateItems()
+                cancellable = timer
+                    .sink { _ in
+                        interviewInstance.fetchFeedback()
+                        updateItems()
+                    }
+            }
+            .onDisappear {
+                cancellable?.cancel()  // Cancel the timer when the view disappears
+            }
         }
     }
 }
