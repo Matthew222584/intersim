@@ -85,7 +85,7 @@ struct QuestionView: View {
             }
         }
         .fullScreenCover(isPresented: $presentFeedbackView) {
-            FeedbackView()
+            FeedbackView(showViews: showViews)
         }
         .id(questionIndex)
     }

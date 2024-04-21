@@ -11,6 +11,7 @@ import Combine
 
 struct FeedbackView: View {
     let interviewInstance = Interview.shared
+    var showViews: [Bool]
     @State var items: [FeedbackUnit] = []
     @State var initialized = false
     @State var timeoutCounter = 0
@@ -51,7 +52,8 @@ struct FeedbackView: View {
                     .fill(Color.white)
             )
             HStack {
-                if let sentiment = item.Sentiment {
+                // if sentiment items exist & in appropriate view
+                if let sentiment = item.Sentiment, showViews[0] || showViews[1] {
                     VStack {
                         Text("Sentiment Top 3")
                             .font(.title)
@@ -71,7 +73,8 @@ struct FeedbackView: View {
                         }
                     }
                 }
-                if let tone = item.Tone {
+                // if tone items exist & in appropriate view
+                if let tone = item.Tone, showViews[1] {
                     VStack {
                         Text("Tone Top 3")
                             .font(.title)

@@ -22,7 +22,7 @@ struct TextView: View {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .sheet(isPresented: $presentFeedbackView) {
-            FeedbackView()
+            FeedbackView(showViews: [true, false, false])
         }
     }
 }

@@ -175,27 +175,27 @@ class Interview {
                 }
                 
                 // sentiment
-                if let sentimentResults = item["sentiment"] as? [[Any]] {
+                if let sentimentResults = item["sentiment_results"] as? [[Any]], !sentimentResults.isEmpty {
                     for result in sentimentResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
                             emotions.append(Emotion(Name: emotion, Percentage: value * 100))
                             print("Emotion: \(emotion), Value: \(value)")
                         }
                     }
-                    unit.Sentiment = emotions.sorted().prefix(3).map { $0 }
+                    unit.Sentiment = emotions
                     feedback.append(unit)
                     emotions = []
                 }
                 
                 // tone
-                if let toneResults = item["speech_emotion"] as? [[Any]] {
+                if let toneResults = item["speech_emotion_results"] as? [[Any]], !toneResults.isEmpty {
                     for result in toneResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
                             emotions.append(Emotion(Name: emotion, Percentage: value * 100))
                             print("Emotion: \(emotion), Value: \(value)")
                         }
                     }
-                    unit.Tone = emotions.sorted().prefix(3).map { $0 }
+                    unit.Tone = emotions
                     feedback.append(unit)
                     emotions = []
                 }
