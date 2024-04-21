@@ -77,7 +77,7 @@ struct QuestionView: View {
             Spacer()
             presentView()
                 .aspectRatio(CGSize(width: 9, height: 16), contentMode: .fit)
-                .frame(maxWidth: 800, maxHeight: 1000)
+                .frame(maxWidth: 1000, maxHeight: 1000)
         }
         .toolbar {
             ToolbarItem(placement:.navigationBarTrailing) {
