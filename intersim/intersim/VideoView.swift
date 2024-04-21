@@ -41,9 +41,10 @@ struct VideoView: View {
                 }
                 isRecording.toggle()
             } label: {
-                Image(systemName: isRecording ? "stop.circle" : "record.circle")
+                Image(systemName: isRecording ? "stop.circle.fill" : "record.circle")
                     .font(.system(size: 50))
                     .padding()
+                    .foregroundColor(.red)
             }
             .disabled(!isPreviewReady)
         }
@@ -165,12 +166,14 @@ struct PreviewView: UIViewRepresentable {
         let screenBounds = UIScreen.main.bounds
         let previewWidth = screenBounds.width
         let previewHeight = screenBounds.height
+//        let centerX = screenBounds.width / 2
+//        let centerY = screenBounds.height / 2
         
         let view = UIView()
         view.frame.size = CGSize(width: previewWidth, height: previewHeight)
         previewLayer.frame = view.bounds.insetBy(dx: borderWidth, dy: borderWidth)
         previewLayer.videoGravity = .resizeAspectFill
-        //previewLayer.position = CGPoint(x: centerX, y: centerY)
+//        previewLayer.position = CGPoint(x: centerX, y: centerY)
         view.layer.addSublayer(previewLayer)
         
         view.layer.borderWidth = borderWidth
@@ -181,8 +184,12 @@ struct PreviewView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
-//        if let previewLayer = uiView.layer.sublayers?.first(where: { $0 is AVCaptureVideoPreviewLayer }) as? AVCaptureVideoPreviewLayer {
-//                    previewLayer.frame = uiView.bounds.insetBy(dx: borderWidth, dy: borderWidth)
-//                }
+//        if let previewLayer = uiView.layer.sublayers?.first(where: { $0 is AVCaptureVideoPreviewLayer
+//        }) as? AVCaptureVideoPreviewLayer {
+//            previewLayer.frame = uiView.bounds.insetBy(dx: borderWidth, dy: borderWidth)
+//            previewLayer.position = CGPoint(
+//                x: UIScreen.main.bounds.width / 2,
+//                y: UIScreen.main.bounds.height / 2)
+//        }
     }
 }

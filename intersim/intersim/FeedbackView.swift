@@ -13,12 +13,20 @@ struct FeedbackView: View {
     let interviewInstance = Interview.shared
     @State var items: [FeedbackUnit] = []
     @State var initialized = false
+    @State var timeoutCounter = 0
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     @State private var cancellable: AnyCancellable?
     
     func updateItems() {
+        var itemCount = self.items.count
         self.items = interviewInstance.feedback
-        if !items.isEmpty {
+        timeoutCounter += 1
+        if self.items.count > itemCount {
+            timeoutCounter = 0
+        }
+        // if a minute has passed
+        print(timeoutCounter * 3, " seconds with no response.")
+        if timeoutCounter >= 20 {
             cancellable?.cancel()  // Cancel the timer when feedback data is received
         }
     }

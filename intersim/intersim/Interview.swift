@@ -51,7 +51,7 @@ class Interview {
             "video": response.videoResponse?.base64EncodedString() ?? ""
         ]
         
-        print(body)
+        //print(body)
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             print("Failed to serialize JSON data")
@@ -64,7 +64,7 @@ class Interview {
             if let error = error {
                 print("Error: \(error)")
             } else if let _ = data, let response = response as? HTTPURLResponse {
-                print(response)
+                //print(response)
                 print("Response: \(response.statusCode)")
             }
         }.resume()
@@ -132,7 +132,7 @@ class Interview {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
         request.httpMethod = "GET"
         
-        print(request)
+        //print(request)
         
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -164,11 +164,11 @@ class Interview {
             for item in responseData {
                 if let questionContent = item["question_content"] as? String {
                     unit.Question = questionContent
-                    print(questionContent)
+                    //print(questionContent)
                 }
                 if let textResponse = item["text_response"] as? String {
                     unit.Response = textResponse
-                    print(textResponse)
+                    //print(textResponse)
                 }
                 if let sentimentResults = item["sentiment_results"] as? [[Any]] {
                     for result in sentimentResults {
@@ -184,7 +184,7 @@ class Interview {
             }
             
             self.feedback = feedback
-            print(feedback)
+            //print(feedback)
         }.resume()
         
         
@@ -210,10 +210,10 @@ class Interview {
 
             for item in responseData {
                 if let questionContent = item["question_content"] as? String {
-                    print(questionContent)
+                    //print(questionContent)
                 }
                 if let textResponse = item["text_response"] as? String {
-                    print(textResponse)
+                    //print(textResponse)
                 }
                 if let sentimentResults = item["sentiment_results"] as? [[Any]] {
                     for result in sentimentResults {
@@ -223,7 +223,7 @@ class Interview {
                     }
                 }
                 if let toneResults = item["speech_emotion_results"] as? [[Any]] {
-                    print(toneResults)
+                    //print(toneResults)
                 }
             }
         }.resume()

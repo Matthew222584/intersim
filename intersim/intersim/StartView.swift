@@ -48,8 +48,9 @@ struct StartView: View {
     
     var body: some View {
         VStack {
-            Text("Choose an interview type")
+            Text("Choose an interview type.")
                 .padding(.top, 30.0)
+                .font(.title)
             VStack {
                 TextButton()
                 AudioButton()

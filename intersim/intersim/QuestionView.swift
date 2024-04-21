@@ -73,9 +73,10 @@ struct QuestionView: View {
         VStack {
             Spacer()
             Text(interviewInstance.getQuestion(index: self.questionIndex))
+                .font(.title)
             Spacer()
             presentView()
-                .aspectRatio(1, contentMode: .fit)
+                .aspectRatio(CGSize(width: 9, height: 16), contentMode: .fit)
                 .frame(maxWidth: 800, maxHeight: 1000)
         }
         .toolbar {
