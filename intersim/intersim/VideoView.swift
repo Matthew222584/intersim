@@ -61,6 +61,9 @@ struct VideoView: View {
                 didFinishRecording?(url, speechRecognizer.transcript)
             }
         }
+        .onDisappear {
+            videoRecorder.destroyCaptureSession()
+        }
     }
 }
 
