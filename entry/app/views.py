@@ -89,10 +89,11 @@ def sentiment_analysis(input_text):
 
 
 def speech_emotion_analysis(base64_audio_string):
-    url = 'https://54.242.14.251/speech_emotion_analysis/'
+    url = 'https://34.239.249.255/speech_emotion_analysis/'
     data = {'audio': base64_audio_string}
+    print("beginning speech emotion analysis")
     response = requests.post(url, json=data, verify=False)
-
+    print("there's a response")
     if response.status_code == 200:
         return response.json()
     else:
@@ -120,7 +121,8 @@ def postresponse(request):
     sentiment_results = sentiment_analysis(user_text_response)
     for emotion, percentage in sentiment_results.items():
         add_analysis_results(interview_id, question_id, 'sentiment', emotion, round(percentage, 4))
-    
+    print("finish sentiment")
+
     speech_emotion_results = ""
     if (base64_audio_string):
         speech_emotion_results = speech_emotion_analysis(base64_audio_string)

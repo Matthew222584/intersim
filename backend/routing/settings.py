@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'routing.wsgi.application'
 DATABASES = {
   'default': {
       'ENGINE': 'django.db.backends.postgresql',
-      'NAME': 'intersimdatabase',
-      'USER': 'ricky',
-      'PASSWORD': 'password',
+      'NAME': 'intersim',
+      'USER': 'admin',
+      'PASSWORD': 'interview123',
       'HOST': 'localhost',
       'PORT': '',
   }
