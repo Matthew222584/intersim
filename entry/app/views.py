@@ -6,6 +6,25 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EmotionOptions
 import requests
+import subprocess
+import base64
+import io
+
+
+def extract_audio_as_base64(video_base64):
+    video_bytes = base64.b64decode(video_base64)
+
+    cmd = ["ffmpeg", "-i", "pipe:", "-vn", "-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2", "-f", "wav", "-"]
+    process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate(input=video_bytes)
+
+    if process.returncode != 0:
+        print("Error extracting audio:", stderr.decode())
+        return None
+
+    audio_base64 = base64.b64encode(stdout).decode('utf-8')
+
+    return audio_base64
 
 
 def user_exists(username):
@@ -93,7 +112,7 @@ def speech_emotion_analysis(interview_id, question_id, base64_audio_string):
     url = 'https://100.25.156.216/speech_emotion_analysis/'
     data = {'audio': base64_audio_string, 'interview_id': interview_id, 'question_id': question_id}
     response = requests.post(url, json=data, verify=False)
-    print("there's a response", response.status_code)
+    print("there's an emotional response", response.status_code)
 
 
 @csrf_exempt
@@ -117,13 +136,33 @@ def post_speech_emotion_results(request):
 
     return JsonResponse({"status":"success"})
 
-def facial_analysis(base64_video_string):
-    url = 'https://3.15.187.51/getfacial'
-    response = requests.get(url, json=data, verify=False)
-    print(response)
+@csrf_exempt
+def post_facial_results(request):
+    if request.method != 'POST':
+        return HttpResponse(status=404)
 
-    if response.status_code == 200:
-        return response.json()
+    try:
+        json_data = json.loads(request.body)
+        print(json_data)
+        speech_emotion_results = json_data['response']
+        interview_id = json_data['interview_id']
+        question_id = json_data['question_id']
+    except KeyError as e:
+        return JsonResponse({'message': f'Missing required parameter: {e}', 'status': 'fail'}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
+
+    for emotion, percentage in speech_emotion_results.items():
+        add_analysis_results(interview_id, question_id, 'facial', emotion, round(percentage, 4))
+
+    return JsonResponse({"status":"success"})
+
+def facial_analysis(interview_id, question_id, base64_video_string):
+    url = 'https://3.15.187.51/getfacial/'
+    data = {'video': base64_video_string, 'interview_id': interview_id, 'question_id': question_id}
+    response = requests.post(url, json=data, verify=False)
+    print("there's a facial response", response.status_code)
+
 
 @csrf_exempt
 def postresponse(request):
@@ -143,19 +182,22 @@ def postresponse(request):
     except json.JSONDecodeError:
         return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
     
-    sentiment_results = sentiment_analysis(user_text_response)
-    for emotion, percentage in sentiment_results.items():
-        add_analysis_results(interview_id, question_id, 'sentiment', emotion, round(percentage, 4))
+    try:
+        sentiment_results = sentiment_analysis(user_text_response)
+        for emotion, percentage in sentiment_results.items():
+            add_analysis_results(interview_id, question_id, 'sentiment', emotion, round(percentage, 4))
+    except Exception as e:
+        print(f"An error occurred for sentiment: {e}")
 
     speech_emotion_results, facial_results = "", ""
     if (base64_audio_string):
         speech_emotion_analysis(interview_id, question_id, base64_audio_string)
     
     if (base64_video_string):
-        facial_results = facial_analysis(base64_video_string)
-        print(facial_results)
-#        for emotion, percentage in facial_results.items():
-#            add_analysis_results(interview_id, question_id, 'facial', emotion, round(percentage, 4))
+        #audio_base64 = extract_audio_as_base64(base64_video_string)
+        #if audio_base64:
+        #    speech_emotion_analysis(interview_id, question_id, audio_base64)
+        facial_analysis(interview_id, question_id, base64_video_string)
 
     insert_interview = """
         INSERT INTO user_responses (interview_id, question_id, text_response, audio_response, video_response_url)
@@ -209,6 +251,7 @@ def getfeedback(request):
 
             sentiment_results = get_analysis_results(interview_id, question_id, 'sentiment')
             speech_emotion_results = get_analysis_results(interview_id, question_id, 'speech_emotion')
+            facial_results = get_analysis_results(interview_id, question_id, 'facial')
 
             question_response = {
                 'question_id': question_id,
@@ -216,7 +259,8 @@ def getfeedback(request):
                 'text_response': text_response,
                 'audio_response': audio_response,
                 'sentiment_results': sentiment_results,
-                'speech_emotion_results': speech_emotion_results
+                'speech_emotion_results': speech_emotion_results,
+                'facial_results': facial_results
             }
 
             response_data.append(question_response)

@@ -23,5 +23,6 @@ urlpatterns = [
     path('getquestions/', views.getquestions, name='getquestions'),
     path('postresponse/', views.postresponse, name='postresponse'),
     path('getfeedback/', views.getfeedback, name='getfeedback'),
-    path('post_speech_emotion_results/', views.post_speech_emotion_results, name='post_speech_emotion_results')
+    path('post_speech_emotion_results/', views.post_speech_emotion_results, name='post_speech_emotion_results'),
+    path('post_facial_results/', views.post_facial_results, name='post_facial_results')
 ]
