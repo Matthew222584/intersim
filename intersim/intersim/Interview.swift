@@ -32,7 +32,7 @@ class Interview {
     private var numQuestions = 0
     private var interviewId = 0
     private var username = ""
-    private let serverUrl = "https://18.221.19.88/"
+    private let serverUrl = "https://18.220.90.225/"
     var feedback: [FeedbackUnit] = []
     
     private init() {
