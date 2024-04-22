@@ -21,6 +21,7 @@ struct TextView: View {
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
+        .frame(width:800)
         .sheet(isPresented: $presentFeedbackView) {
             FeedbackView(showViews: [true, false, false])
         }

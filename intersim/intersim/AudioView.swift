@@ -26,9 +26,10 @@ struct AudioView: View {
                 }
                 isRecording.toggle()
             } label: {
-                Image(systemName: isRecording ? "stop.circle" : "record.circle")
+                Image(systemName: isRecording ? "stop.circle.fill" : "record.circle")
                     .font(.system(size: 50))
                     .padding()
+                    .foregroundColor(.red)
             }
             Spacer()
         }
