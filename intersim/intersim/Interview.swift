@@ -77,7 +77,7 @@ class Interview {
         }.resume()
     }
     
-    private func fetchQuestions() {
+    public func fetchQuestions() {
         guard var apiUrl = URLComponents(string: "\(serverUrl)getquestions/") else {
             print("fetchQuestions: Bad URL")
             return
@@ -111,6 +111,10 @@ class Interview {
                 print("fetchQuestions: failed to get interview id")
             }
             if let questionsRecv = jsonObj["questions"] as? [[String: String]] {
+                self.questions = []
+                self.questionIds = []
+                self.numQuestions = 0
+                
                 for questionDict in questionsRecv {
                     if let questionId = questionDict.keys.first,
                        let questionText = questionDict.values.first {
@@ -140,7 +144,6 @@ class Interview {
         request.httpMethod = "GET"
         
         //print(request)
-        
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
