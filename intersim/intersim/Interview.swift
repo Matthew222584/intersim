@@ -179,15 +179,20 @@ class Interview {
                 }
                 
                 // sentiment
+                var tripped = false
                 var sentimentEmotions: [Emotion] = []
                 if let sentimentResults = item["sentiment_results"] as? [[Any]], !sentimentResults.isEmpty {
                     for result in sentimentResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
+                            tripped = true
                             sentimentEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
                             print("Sentiment: \(emotion), Value: \(value)")
                         }
                     }
-                    unit.Sentiment = sentimentEmotions
+                    if tripped {
+                        unit.Sentiment = sentimentEmotions
+                    }
+                    tripped = false
                 }
                 
                 // tone
@@ -195,24 +200,32 @@ class Interview {
                 if let toneResults = item["speech_emotion_results"] as? [[Any]], !toneResults.isEmpty {
                     for result in toneResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
+                            tripped = true
                             toneEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
                             print("Tone: \(emotion), Value: \(value)")
                         }
                     }
-                    unit.Tone = toneEmotions
+                    if tripped {
+                        unit.Tone = toneEmotions
+                    }
+                    tripped = false
                 }
                 
                 // facial
-    //            var facialEmotions: [Emotion] = []
-    //            if let facialResults = item["facial_emotion"] as? [[Any]] {
-    //                for result in facialResults {
-    //                    if let emotion = result.first as? String, let value = result.last as? Double {
-    //                        facialEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
-    //                        print("Emotion: \(emotion), Value: \(value)")
-    //                    }
-    //                }
-    //                unit.Facial = facialEmotions
-    //            }
+                var facialEmotions: [Emotion] = []
+                if let facialResults = item["facial_results"] as? [[Any]] {
+                    for result in facialResults {
+                        if let emotion = result.first as? String, let value = result.last as? Double {
+                            tripped = true
+                            facialEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
+                            print("Emotion: \(emotion), Value: \(value)")
+                        }
+                    }
+                    if tripped {
+                        unit.Facial = facialEmotions
+                    }
+                    tripped = false
+                }
                 
                 feedback.append(unit)
             }

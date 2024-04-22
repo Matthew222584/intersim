@@ -74,13 +74,34 @@ struct FeedbackView: View {
                     }
                 }
                 // if tone items exist & in appropriate view
-                if let tone = item.Tone, showViews[1] {
+                if let tone = item.Tone, showViews[1] || showViews[2] {
                     VStack {
                         Text("Tone Top 3")
                             .font(.title)
                             .foregroundColor(.blue)
                             .padding(.bottom, 5)
                         ForEach(tone.sorted().prefix(3)) { emotion in
+                            HStack {
+                                Text(emotion.Name)
+                                    .bold()
+                                Spacer()
+                                Text(String(format: "%.1f%%", emotion.Percentage))
+                            }
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(LinearGradient(gradient: Gradient(colors: [.blue, .blue.opacity(0.5)]), startPoint: .leading, endPoint: .trailing))
+                            .cornerRadius(10)
+                        }
+                    }
+                }
+                // if facial items exist & in appropriate view
+                if let facial = item.Facial, showViews[2] {
+                    VStack {
+                        Text("Facial Top 3")
+                            .font(.title)
+                            .foregroundColor(.blue)
+                            .padding(.bottom, 5)
+                        ForEach(facial.sorted().prefix(3)) { emotion in
                             HStack {
                                 Text(emotion.Name)
                                     .bold()
