@@ -7,6 +7,7 @@ from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EmotionOptions
 import requests
 
+
 def user_exists(username):
     """Check if the user exists in the database."""
     user_exists_query = '''
@@ -88,17 +89,41 @@ def sentiment_analysis(input_text):
     return emotion_dict
 
 
-def speech_emotion_analysis(base64_audio_string):
-    url = 'https://34.239.249.255/speech_emotion_analysis/'
-    data = {'audio': base64_audio_string}
-    print("beginning speech emotion analysis")
+def speech_emotion_analysis(interview_id, question_id, base64_audio_string):
+    url = 'https://100.25.156.216/speech_emotion_analysis/'
+    data = {'audio': base64_audio_string, 'interview_id': interview_id, 'question_id': question_id}
     response = requests.post(url, json=data, verify=False)
-    print("there's a response")
+    print("there's a response", response.status_code)
+
+
+@csrf_exempt
+def post_speech_emotion_results(request):
+    if request.method != 'POST':
+        return HttpResponse(status=404)
+    
+    try:
+        json_data = json.loads(request.body)
+        print(json_data)
+        speech_emotion_results = json_data['response']
+        interview_id = json_data['interview_id']
+        question_id = json_data['question_id']
+    except KeyError as e:
+        return JsonResponse({'message': f'Missing required parameter: {e}', 'status': 'fail'}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({'message': 'Invalid JSON format', 'status': 'fail'}, status=400)
+
+    for emotion, percentage in speech_emotion_results.items():
+        add_analysis_results(interview_id, question_id, 'speech_emotion', emotion, round(percentage, 4))
+
+    return JsonResponse({"status":"success"})
+
+def facial_analysis(base64_video_string):
+    url = 'https://3.15.187.51/getfacial'
+    response = requests.get(url, json=data, verify=False)
+    print(response)
+
     if response.status_code == 200:
         return response.json()
-    else:
-        print('Error running speech emotion analysis with response code ', response.status_code)
-
 
 @csrf_exempt
 def postresponse(request):
@@ -121,13 +146,16 @@ def postresponse(request):
     sentiment_results = sentiment_analysis(user_text_response)
     for emotion, percentage in sentiment_results.items():
         add_analysis_results(interview_id, question_id, 'sentiment', emotion, round(percentage, 4))
-    print("finish sentiment")
 
-    speech_emotion_results = ""
+    speech_emotion_results, facial_results = "", ""
     if (base64_audio_string):
-        speech_emotion_results = speech_emotion_analysis(base64_audio_string)
-        for emotion, percentage in speech_emotion_results.items():
-            add_analysis_results(interview_id, question_id, 'speech_emotion', emotion, round(percentage, 4))
+        speech_emotion_analysis(interview_id, question_id, base64_audio_string)
+    
+    if (base64_video_string):
+        facial_results = facial_analysis(base64_video_string)
+        print(facial_results)
+#        for emotion, percentage in facial_results.items():
+#            add_analysis_results(interview_id, question_id, 'facial', emotion, round(percentage, 4))
 
     insert_interview = """
         INSERT INTO user_responses (interview_id, question_id, text_response, audio_response, video_response_url)
@@ -136,7 +164,7 @@ def postresponse(request):
     with connection.cursor() as cursor:
         cursor.execute(insert_interview, [interview_id, question_id, user_text_response, base64_audio_string, base64_video_string])
 
-    return JsonResponse({'status': 'success', 'sentiment': sentiment_results, 'speech_emotion': speech_emotion_results}, status=201)
+    return JsonResponse({'status': 'success'}, status=201)
 
 
 def get_analysis_results(interview_id, question_id, analysis_type):
