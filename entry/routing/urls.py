@@ -16,7 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+<<<<<<< HEAD
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+=======
+from app import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('getquestions/', views.getquestions, name='getquestions'),
+    path('postresponse/', views.postresponse, name='postresponse'),
+    path('getfeedback/', views.getfeedback, name='getfeedback'),
+    path('post_speech_emotion_results/', views.post_speech_emotion_results, name='post_speech_emotion_results')
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
 ]

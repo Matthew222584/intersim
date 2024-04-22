@@ -107,6 +107,7 @@ class Interview {
             
             if let id = jsonObj["interview_id"] as? Int {
                 self.interviewId = id
+                print(id)
             } else {
                 print("fetchQuestions: failed to get interview id")
             }
@@ -143,8 +144,6 @@ class Interview {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
         request.httpMethod = "GET"
         
-        //print(request)
-        
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 print("getFeedback: NETWORKING ERROR")
@@ -166,102 +165,60 @@ class Interview {
             }
             
             var feedback: [FeedbackUnit] = []
-            var emotions: [Emotion] = []
-            var unit = FeedbackUnit(Question: "",Response: "")
             
             for item in responseData {
+                var unit = FeedbackUnit(Question: "", Response: "")
+                
                 if let questionContent = item["question_content"] as? String {
                     unit.Question = questionContent
+                    print(questionContent)
                 }
                 if let textResponse = item["text_response"] as? String {
+                    print(textResponse)
                     unit.Response = textResponse
                 }
                 
                 // sentiment
+                var sentimentEmotions: [Emotion] = []
                 if let sentimentResults = item["sentiment_results"] as? [[Any]], !sentimentResults.isEmpty {
                     for result in sentimentResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
-                            emotions.append(Emotion(Name: emotion, Percentage: value * 100))
-                            print("Emotion: \(emotion), Value: \(value)")
+                            sentimentEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
+                            print("Sentiment: \(emotion), Value: \(value)")
                         }
                     }
-                    unit.Sentiment = emotions
-                    feedback.append(unit)
-                    emotions = []
+                    unit.Sentiment = sentimentEmotions
                 }
                 
                 // tone
+                var toneEmotions: [Emotion] = []
                 if let toneResults = item["speech_emotion_results"] as? [[Any]], !toneResults.isEmpty {
                     for result in toneResults {
                         if let emotion = result.first as? String, let value = result.last as? Double {
-                            emotions.append(Emotion(Name: emotion, Percentage: value * 100))
-                            print("Emotion: \(emotion), Value: \(value)")
+                            toneEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
+                            print("Tone: \(emotion), Value: \(value)")
                         }
                     }
-                    unit.Tone = emotions
-                    feedback.append(unit)
-                    emotions = []
+                    unit.Tone = toneEmotions
                 }
                 
-//                // facial
-//                if let facialResults = item["facial_emotion"] as? [[Any]] {
-//                    for result in facialResults {
-//                        if let emotion = result.first as? String, let value = result.last as? Double {
-//                            emotions.append(Emotion(Name: emotion, Percentage: value * 100))
-//                            print("Emotion: \(emotion), Value: \(value)")
-//                        }
-//                    }
-//                    unit.Tone = emotions
-//                    feedback.append(unit)
-//                    emotions = []
-//                }
+                // facial
+    //            var facialEmotions: [Emotion] = []
+    //            if let facialResults = item["facial_emotion"] as? [[Any]] {
+    //                for result in facialResults {
+    //                    if let emotion = result.first as? String, let value = result.last as? Double {
+    //                        facialEmotions.append(Emotion(Name: emotion, Percentage: value * 100))
+    //                        print("Emotion: \(emotion), Value: \(value)")
+    //                    }
+    //                }
+    //                unit.Facial = facialEmotions
+    //            }
+                
+                feedback.append(unit)
             }
             
             self.feedback = feedback
-            //print(feedback)
         }.resume()
-        
-        // DEPRECATED, do not uncomment as the above function
-        // is the uppdated version. Temporarily leaving this here for ref
-//        URLSession.shared.dataTask(with: request) { data, response, error in
-//            guard let data = data, error == nil else {
-//                print("getFeedback: NETWORKING ERROR")
-//                return
-//            }
-//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-//                print("getFeedback: HTTP STATUS: \(httpStatus.statusCode)")
-//                return
-//            }
-//            
-//            guard let jsonObj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-//                print("getFeedback: failed JSON deserialization")
-//                return
-//            }
-//            
-//            guard let responseData = jsonObj["response_data"] as? [[String: Any]] else {
-//                print("Error: Unable to extract response_data from JSON")
-//                return
-//            }
-//
-//            for item in responseData {
-//                if let questionContent = item["question_content"] as? String {
-//                    //print(questionContent)
-//                }
-//                if let textResponse = item["text_response"] as? String {
-//                    //print(textResponse)
-//                }
-//                if let sentimentResults = item["sentiment_results"] as? [[Any]] {
-//                    for result in sentimentResults {
-//                        if let emotion = result.first as? String, let value = result.last as? Double {
-//                            print("Emotion: \(emotion), Value: \(value)")
-//                        }
-//                    }
-//                }
-//                if let toneResults = item["speech_emotion_results"] as? [[Any]] {
-//                    //print(toneResults)
-//                }
-//            }
-//        }.resume()
     }
     
     func getQuestion(index: Int) -> String {

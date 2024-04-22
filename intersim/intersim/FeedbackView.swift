@@ -80,7 +80,7 @@ struct FeedbackView: View {
                             .font(.title)
                             .foregroundColor(.blue)
                             .padding(.bottom, 5)
-                        ForEach(tone) { emotion in
+                        ForEach(tone.sorted().prefix(3)) { emotion in
                             HStack {
                                 Text(emotion.Name)
                                     .bold()

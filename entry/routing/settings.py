@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+<<<<<<< HEAD
 from pathlib import Path
 import os
+=======
+import os
+from pathlib import Path
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-b9wc9=1r&0w2xee%)8)#rb=jj14x05-!iei!&j+e)7^kmwng_)'
+=======
+SECRET_KEY = 'django-insecure-yy2cv$-a_xru68q(#(f*nsish!!1z)gk-y97hd@#^f1tg*f#6x'
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['18.219.139.85', 'localhost', '127.0.0.1']
+=======
+ALLOWED_HOSTS = ['18.221.19.88', 'localhost', '127.0.0.1']
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
 
 
 # Application definition
@@ -75,6 +88,7 @@ WSGI_APPLICATION = 'routing.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
+<<<<<<< HEAD
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -82,6 +96,18 @@ DATABASES = {
 }
 
 
+=======
+  'default': {
+      'ENGINE': 'django.db.backends.postgresql',
+      'NAME': 'intersim',
+      'USER': 'admin',
+      'PASSWORD': 'interview123',
+      'HOST': 'localhost',
+      'PORT': '',
+  }
+}
+
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -117,9 +143,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+<<<<<<< HEAD
 STATIC_ROOT = BASE_DIR / 'static'   # added line
+=======
+STATIC_ROOT = BASE_DIR / 'static'
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+<<<<<<< HEAD
+=======
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
+>>>>>>> 797bbe22f7a06d28fce8ac62606394ebc5730952
