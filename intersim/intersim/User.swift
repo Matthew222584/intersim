@@ -10,6 +10,7 @@ import Foundation
 class User {
     static let shared = User()
     private var username = ""
+    private var numQuestions = 0
     
     private init() {}
     
@@ -19,5 +20,13 @@ class User {
     
     func getUsername() -> String {
         return self.username
+    }
+    
+    func setNumQuestions(numQuestions: Int) {
+        self.numQuestions = numQuestions
+    }
+    
+    func getNumQuestions() -> Int {
+        return self.numQuestions
     }
 }

@@ -149,7 +149,6 @@ struct FeedbackView: View {
                 }
             }
             Button {
-                interviewInstance.fetchQuestions()
                 interviewInstance.feedback = []
                 initialized.toggle()
             } label: {

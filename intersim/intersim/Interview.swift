@@ -31,13 +31,11 @@ class Interview {
     private var questionIds: [String] = []
     private var numQuestions = 0
     private var interviewId = 0
-    private var username = ""
     private let serverUrl = "https://18.220.90.225/"
     var feedback: [FeedbackUnit] = []
     
     private init() {
-        self.username = User.shared.getUsername()
-        fetchQuestions()
+        //fetchQuestions()
     }
     
     func postResponse(response: Response) {
@@ -83,13 +81,15 @@ class Interview {
             return
         }
         apiUrl.queryItems = [
-            URLQueryItem(name: "username", value: username),
-            URLQueryItem(name: "num_questions", value: "2")
+            URLQueryItem(name: "username", value: User.shared.getUsername()),
+            URLQueryItem(name: "num_questions", value: String(User.shared.getNumQuestions()))
         ]
         
         var request = URLRequest(url: apiUrl.url!)
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
         request.httpMethod = "GET"
+        
+        print(request)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
@@ -248,9 +248,5 @@ class Interview {
     
     func getQuestionId(index: Int) -> Int {
         return Int(questionIds[index])!
-    }
-    
-    func setUsername(username: String) {
-        self.username = username
     }
 }
