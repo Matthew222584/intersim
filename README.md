@@ -4,7 +4,7 @@
 |:-----:|:-----:|:--------:|
 |[<img src="https://eecs441.eecs.umich.edu/img/admin/video.png">][video]|[<img src="https://eecs441.eecs.umich.edu/img/admin/wiki.png">][wiki]|[<img src="https://eecs441.eecs.umich.edu/img/admin/trello.png">][agile]|
 
-![Elevator Pitch](/.github/images/Final Presentation.png) <!-- MUST be placed in publicly accessible github -->
+![Elevator Pitch](</.github/images/Final Presentation.png>) <!-- MUST be placed in publicly accessible github -->
 ![Team](/.github/images/Team.png)
 
 [video]: https://youtu.be/2bbN9bA0NN0
